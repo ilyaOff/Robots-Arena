@@ -9,7 +9,8 @@ public class ConstructorManager : MonoBehaviour
     public float maxDistanceRay = 10f;
 
     public GameObject[] details;
-
+    GameObject tmpDetail = null;
+    public int detailNumber = -1; 
     
     // Start is called before the first frame update
     void Start()
@@ -17,37 +18,84 @@ public class ConstructorManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    void Update()
+    {
+        //заглушка
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            detailNumber = 0;
+            if (tmpDetail != null)
+                Destroy(tmpDetail);
+            tmpDetail = Instantiate(details[detailNumber]);
+            tmpDetail.GetComponent<Collider>().enabled = false;
+            tmpDetail.GetComponent<Parts>().IsSelected = true;
+            //Чтобы передать материал по ссылке, используется свойство gameObject
+            Material material = tmpDetail.gameObject.GetComponent<Renderer>().material;
+            material.color = new Color(material.color.r,
+                                        material.color.g,
+                                        material.color.b,
+                                        material.color.a/2);
+            //tmpDetail.GetComponent<Renderer>().material = material;
+        }
+            
+    }
     void FixedUpdate()
     {
         if (details.Length < 1) return;
+        if (detailNumber < 0) return;//не выбрана деталь
+        
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
-        if (Input.GetMouseButtonDown(0))
+        Vector3 position = ray.origin + ray.direction* maxDistanceRay/2;
+        tmpDetail.transform.position = position;
+        if (Physics.Raycast(ray, out hit, maxDistanceRay))
         {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, maxDistanceRay))
-            {
-                Parts parts = hit.transform.GetComponent<Parts>();
-                if (parts is null) return;
-
-                //Debug.Log(details[0].GetComponent<Parts>().connectionPoints[0].position);
-                //Рассчёт точки, куда надо поставить деталь
-                //Точка пересечения луча + позиция точки привязки в префабе
-                Transform connectionPoint = details[0].GetComponent<Parts>().connectionPoints[0];
-                Vector3 position = hit.point
-                    ;// + connectionPoint.position;
-                GameObject newDetails = Instantiate(details[0]);
-                //рассчёт поворота детали
-
-                newDetails.transform.rotation *=
-                    Quaternion.FromToRotation(connectionPoint.up, hit.normal);
-                newDetails.transform.position = hit.point +
-                    newDetails.GetComponent<Parts>().connectionPoints[0].position;
-
-                testNormalStart = hit.point;
-                testNormal = 3*(newDetails.transform.position - hit.point);
+            position = hit.point + details[detailNumber].GetComponent<Parts>().connectionPoints[0].position;
+            Parts parts = hit.transform.GetComponent<Parts>();
+            if (parts is null)
+            {                
+                tmpDetail.transform.position = position;
+                return;
             }
+
+            //Рассчёт точки, куда надо поставить деталь
+            //Точка пересечения луча + позиция точки привязки в префабе
+            Transform connectionPoint = tmpDetail.GetComponent<Parts>().connectionPoints[0];
+
+            //GameObject newDetails = Instantiate(details[0]);
+
+            //рассчёт поворота детали
+            tmpDetail.transform.rotation = Quaternion.Euler(0, 0, 0);
+            tmpDetail.transform.rotation *=
+                Quaternion.FromToRotation(connectionPoint.up, hit.normal);
+
+            position = hit.point 
+                + tmpDetail.GetComponent<Parts>().connectionPoints[0].position
+                - tmpDetail.transform.position;
+
+            tmpDetail.transform.position = position;
+
+
+            //test, delete this
+            testNormalStart = hit.point;
+            testNormal = tmpDetail.transform.position - hit.point;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                detailNumber = -1;
+
+                Material material = tmpDetail.gameObject.GetComponent<Renderer>().material;
+                material.color = new Color(material.color.r,
+                                        material.color.g,
+                                        material.color.b,
+                                         material.color.a * 2);
+
+                tmpDetail.GetComponent<Collider>().enabled = true;
+                tmpDetail.GetComponent<Parts>().IsSelected = false;
+                tmpDetail = null;
+            }
+
         }
     }
     
@@ -56,6 +104,6 @@ public class ConstructorManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(testNormalStart, testNormalStart + testNormal);
+        Gizmos.DrawLine(testNormalStart, testNormalStart + 3*testNormal);
     }
 }

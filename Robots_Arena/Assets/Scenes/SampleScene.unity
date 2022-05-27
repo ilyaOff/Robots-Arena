@@ -287,7 +287,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionPoints: []
-  isSelectedTest: 0
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +405,7 @@ MonoBehaviour:
   maxDistanceRay: 10
   details:
   - {fileID: 6203555964444497059, guid: 37483c9c6d3ddad4fa977327bfbf6295, type: 3}
+  detailNumber: -1
 --- !u!1 &761897474
 GameObject:
   m_ObjectHideFlags: 0

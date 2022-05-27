@@ -6,8 +6,8 @@ public class Parts : MonoBehaviour
 {
     public Transform[] connectionPoints;
 
-    [SerializeField]
-    private bool isSelectedTest = false;
+    //[SerializeField]
+    //private bool isSelectedTest = false;
 
     private bool isSelected = false;
     
@@ -43,6 +43,6 @@ public class Parts : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        IsSelected = isSelectedTest;
+       // IsSelected = isSelectedTest;
     }
 }

@@ -138,7 +138,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c99f014736e0dc347ae8de4eb1c99384, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -186,7 +186,6 @@ MonoBehaviour:
   connectionPoints:
   - {fileID: 6203555964431369374}
   - {fileID: 6203555965255685506}
-  isSelectedTest: 0
 --- !u!1 &6203555965255685505
 GameObject:
   m_ObjectHideFlags: 0
