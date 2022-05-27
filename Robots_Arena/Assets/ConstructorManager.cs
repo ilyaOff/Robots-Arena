@@ -30,7 +30,7 @@ public class ConstructorManager : MonoBehaviour
         //заглушка
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            
+            button.onClick.Invoke();
         }
             
     }
