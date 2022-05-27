@@ -584,8 +584,13 @@ MonoBehaviour:
   maxRange: 10
   minRange: 1
   R: 4
-  rotateSpeed: 90
   moveSpeed: 3
+  rotateSpeed: 90
+  verticalSpeed: 30
+  minY: 0.2
+  maxY: 10
+  minAngle: -5
+  maxAngle: 60
 --- !u!114 &534669907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -599,7 +604,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 534669904}
-  maxDistanceRay: 10
+  maxDistanceRay: 5
+  button: {fileID: 396318236}
 --- !u!1 &761897474
 GameObject:
   m_ObjectHideFlags: 0
