@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ConstructorManager : MonoBehaviour
 {
@@ -8,50 +9,43 @@ public class ConstructorManager : MonoBehaviour
     [Range(1, 15)]
     public float maxDistanceRay = 10f;
 
-    public GameObject[] details;
-    GameObject tmpDetail = null;
-    public int detailNumber = -1; 
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Parts tmpDetail = null;
 
+    public Button button;
+    // Start is called before the first frame update
+
+    public void StartPlacingBilding(Parts prefab)
+    {
+        if (tmpDetail != null)
+            Destroy(tmpDetail);
+
+        tmpDetail = Instantiate(prefab);
+
+        tmpDetail.SetTransparent();
+        tmpDetail.gameObject.GetComponent<Collider>().enabled = false;
+    }
     void Update()
     {
         //заглушка
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            detailNumber = 0;
-            if (tmpDetail != null)
-                Destroy(tmpDetail);
-            tmpDetail = Instantiate(details[detailNumber]);
-            tmpDetail.GetComponent<Collider>().enabled = false;
-            tmpDetail.GetComponent<Parts>().IsSelected = true;
-            //Чтобы передать материал по ссылке, используется свойство gameObject
-            Material material = tmpDetail.gameObject.GetComponent<Renderer>().material;
-            material.color = new Color(material.color.r,
-                                        material.color.g,
-                                        material.color.b,
-                                        material.color.a/2);
-            //tmpDetail.GetComponent<Renderer>().material = material;
+            
         }
             
     }
     void FixedUpdate()
     {
-        if (details.Length < 1) return;
-        if (detailNumber < 0) return;//не выбрана деталь
-        
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        if (tmpDetail is null) return;//не выбрана деталь
 
-        Vector3 position = ray.origin + ray.direction* maxDistanceRay/2;
+        Transform connectionPoint = tmpDetail.connectionPoints[0];
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+         
+        Vector3 position = ray.origin + ray.direction* maxDistanceRay;
         tmpDetail.transform.position = position;
-        if (Physics.Raycast(ray, out hit, maxDistanceRay))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistanceRay))
         {
-            position = hit.point + details[detailNumber].GetComponent<Parts>().connectionPoints[0].position;
+            position = hit.point;
             Parts parts = hit.transform.GetComponent<Parts>();
             if (parts is null)
             {                
@@ -61,21 +55,16 @@ public class ConstructorManager : MonoBehaviour
 
             //Рассчёт точки, куда надо поставить деталь
             //Точка пересечения луча + позиция точки привязки в префабе
-            Transform connectionPoint = tmpDetail.GetComponent<Parts>().connectionPoints[0];
-
-            //GameObject newDetails = Instantiate(details[0]);
-
-            //рассчёт поворота детали
-            tmpDetail.transform.rotation = Quaternion.Euler(0, 0, 0);
-            tmpDetail.transform.rotation *=
-                Quaternion.FromToRotation(connectionPoint.up, hit.normal);
-
-            position = hit.point 
-                + tmpDetail.GetComponent<Parts>().connectionPoints[0].position
-                - tmpDetail.transform.position;
+            
+            position = hit.point
+                + connectionPoint.position - tmpDetail.transform.position;
 
             tmpDetail.transform.position = position;
 
+            //рассчёт поворота детали
+            tmpDetail.transform.rotation = Quaternion.identity;
+            tmpDetail.transform.rotation *=
+                Quaternion.FromToRotation(connectionPoint.up, hit.normal);
 
             //test, delete this
             testNormalStart = hit.point;
@@ -83,19 +72,11 @@ public class ConstructorManager : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                detailNumber = -1;
-
-                Material material = tmpDetail.gameObject.GetComponent<Renderer>().material;
-                material.color = new Color(material.color.r,
-                                        material.color.g,
-                                        material.color.b,
-                                         material.color.a * 2);
-
-                tmpDetail.GetComponent<Collider>().enabled = true;
-                tmpDetail.GetComponent<Parts>().IsSelected = false;
+                tmpDetail.SetNormal();
+                tmpDetail.gameObject.GetComponent<Collider>().enabled = true;  
+                
                 tmpDetail = null;
             }
-
         }
     }
     

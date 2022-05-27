@@ -6,11 +6,7 @@ public class Parts : MonoBehaviour
 {
     public Transform[] connectionPoints;
 
-    //[SerializeField]
-    //private bool isSelectedTest = false;
-
     private bool isSelected = false;
-    
     public bool IsSelected
     {
         get 
@@ -18,7 +14,7 @@ public class Parts : MonoBehaviour
             return isSelected;
         }
         set 
-        { 
+        {
             isSelected = value;
             if(connectionPoints.Length > 0)
                 foreach (Transform point in connectionPoints)
@@ -28,21 +24,33 @@ public class Parts : MonoBehaviour
         }
     }
 
-    /* private void OnDrawGizmos()
-     {
-         Gizmos.color = Color.green;
-         if(pointConnection != null)
-         Gizmos.DrawSphere(pointConnection.position, 0.1f);
-     }*/
-    // Start is called before the first frame update
+    public Renderer meshRenderer;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       // IsSelected = isSelectedTest;
+    public void SetTransparent()
+    {        
+        IsSelected = true;
+        //Чтобы передать материал по ссылке, используется свойство gameObject
+       
+        meshRenderer.material.color = new Color(meshRenderer.material.color.r,
+                                    meshRenderer.material.color.g,
+                                    meshRenderer.material.color.b,
+                                    meshRenderer.material.color.a / 2);
     }
+
+    public void SetNormal()
+    {
+        IsSelected = false;
+        //Чтобы передать материал по ссылке, используется свойство gameObject
+        meshRenderer.material.color = new Color(meshRenderer.material.color.r,
+                                     meshRenderer.material.color.g,
+                                     meshRenderer.material.color.b,
+                                     meshRenderer.material.color.a * 2);
+    }
+
+
 }

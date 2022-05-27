@@ -186,6 +186,7 @@ MonoBehaviour:
   connectionPoints:
   - {fileID: 6203555964431369374}
   - {fileID: 6203555965255685506}
+  meshRenderer: {fileID: 6203555964444497062}
 --- !u!1 &6203555965255685505
 GameObject:
   m_ObjectHideFlags: 0
