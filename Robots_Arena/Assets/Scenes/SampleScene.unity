@@ -583,10 +583,9 @@ MonoBehaviour:
   goal: {fileID: 761897475}
   maxRange: 10
   minRange: 1
-  R: 4
   moveSpeed: 3
-  rotateSpeed: 90
-  verticalSpeed: 30
+  rotateSpeed: 180
+  verticalSpeed: 120
   minY: 0.2
   maxY: 10
   minAngle: -5
@@ -606,6 +605,7 @@ MonoBehaviour:
   camera: {fileID: 534669904}
   maxDistanceRay: 5
   button: {fileID: 396318236}
+  speedRotate: 90
 --- !u!1 &761897474
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,7 +618,7 @@ GameObject:
   m_Layer: 0
   m_Name: GoalOfCamera
   m_TagString: Untagged
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1018,6 +1018,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestDetail
       objectReference: {fileID: 0}
+    - target: {fileID: 6203555964444497060, guid: 37483c9c6d3ddad4fa977327bfbf6295,
+        type: 3}
+      propertyPath: meshRenderer
+      value: 
+      objectReference: {fileID: 2142293618}
     - target: {fileID: 6203555964444497064, guid: 37483c9c6d3ddad4fa977327bfbf6295,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1073,10 +1078,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6203555964444497060, guid: 37483c9c6d3ddad4fa977327bfbf6295,
-        type: 3}
-      propertyPath: meshRenderer
-      value: 
-      objectReference: {fileID: 2142293618}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37483c9c6d3ddad4fa977327bfbf6295, type: 3}
