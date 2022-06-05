@@ -519,7 +519,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 7907480671632611260, guid: 1a240149bd8a1094b939991cd1d64643,
             type: 3}
-          m_ObjectArgumentAssemblyTypeName: Parts, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: Part, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -649,7 +649,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 6203555964444497060, guid: 37483c9c6d3ddad4fa977327bfbf6295,
             type: 3}
-          m_ObjectArgumentAssemblyTypeName: Parts, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: Part, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -816,6 +816,7 @@ MonoBehaviour:
   maxDistanceRay: 5
   button: {fileID: 396318236}
   placer: {fileID: 0}
+  placers: []
 --- !u!1 &761897474
 GameObject:
   m_ObjectHideFlags: 0
