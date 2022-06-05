@@ -9,23 +9,37 @@ public class ConstructorManager : MonoBehaviour
 
     public Button button;//Кнопка добавления детали (исправить)
 
-    [Range(0, 90)]
-    public float speedRotate = 30;    
+    Part tmpDetail = null;
 
-    Parts tmpDetail = null;
-    Vector3 oldPointPlaceDetail = Vector3.zero;//Problems??
-    //Добавить модифицированный режим, в котором будет использоваться
-    //[Range(0.005f, 0.4f)]
-    //public float changePositionDistance = 0.1f;
+    [SerializeField]
+    public Installer placer;
 
-   
-    public void StartPlacingPart(Parts prefab)
+    [SerializeField]
+    private Installer[] placers;
+
+    /*private Vector3 testNormal = Vector3.up;
+    private Vector3 testNormalStart = Vector3.zero;
+    private void OnDrawGizmos()
     {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(testNormalStart, testNormalStart + 3 * testNormal);
+    }*/
+    private void Start()
+    {
+        //placer = (Placer)Placer.CreateInstance(nameof(Placer));
+        placer = new SimpleInstaller();
+    }
+    public void StartPlacingPart(Part prefab)
+    {
+        Vector3 position = Vector3.zero;
         if (tmpDetail != null)
+        {
+            position = tmpDetail.transform.position;
             Destroy(tmpDetail.gameObject);
+        }
 
-        tmpDetail = Instantiate(prefab);
-        tmpDetail.SetTransparent();
+        tmpDetail = Instantiate(prefab, position, Quaternion.identity);
+        tmpDetail.Taked();
     }
     void Update()
     {
@@ -34,117 +48,84 @@ public class ConstructorManager : MonoBehaviour
             button.onClick.Invoke();
         }
     }
-
-    private void KeyBoardRotation()
-    {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            DetailRotate(0, -1, 0);
-        }
-        if (Input.GetKey(KeyCode.E))
-        {
-            DetailRotate(0, 1, 0);
-        }
-
-        if (Input.GetKey(KeyCode.R))
-        {
-            DetailRotate(1, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.F))
-        {
-            DetailRotate(-1, 0, 0);
-        }
-
-        if (Input.GetKey(KeyCode.T))
-        {
-            DetailRotate(0, 0, 1);
-        }
-        if (Input.GetKey(KeyCode.G))
-        {
-            DetailRotate(0, 0, -1);
-        }
-    }
-
+        
     void FixedUpdate()
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        Parts parts = null;
-        Vector3 position = ray.origin + ray.direction * maxDistanceRay;
+        Part parts = null;
+        Vector3 position = ray.origin + ray.direction * maxDistanceRay;        
+        
         if (Physics.Raycast(ray, out hit, maxDistanceRay))
         {
-            parts = hit.transform.GetComponent<Parts>();
+            parts = hit.transform.GetComponentInParent<Part>();
             position = hit.point;
         }
 
-        if (tmpDetail == null) //не выбрана деталь
+        if (tmpDetail == null)
         {
-            if (parts != null && Input.GetMouseButtonDown(0))
-            {
-                tmpDetail = parts;
-                tmpDetail.SetTransparent();
-            }
-            return;
+            if (Input.GetMouseButtonDown(0))
+                TryTakeDetail(parts);
         }
-
-        KeyBoardRotation();
-        Transform connectionPoint = tmpDetail.connectionPoints[0];
-        Vector3 shift = -connectionPoint.position + tmpDetail.transform.position;
-        //Точка пересечения луча + позиция точки привязки в префабе
-        tmpDetail.transform.position = position + shift;
-            
-        if (parts != null)
+        else
         {
-            //Оптимизировать при медленной работе
-            //if(Vector3.Distance(oldPointPlaceDetail, position) < changePositionDistance)
-            if (!oldPointPlaceDetail.Equals(position))
-            {
-                oldPointPlaceDetail = position;
-                tmpDetail.transform.rotation =
-                    Quaternion.FromToRotation(connectionPoint.up, hit.normal)
-                    * tmpDetail.transform.rotation;
-            }
+            placer.DetailRotate(tmpDetail, KeyBoardRotation());
+            placer.ChangeTransformDetail(tmpDetail, parts, position, hit.normal);
 
             if (Input.GetMouseButtonDown(0))
             {
-                tmpDetail.SetNormal(hit.transform);
-                tmpDetail = null;
+                if (placer.TryPlaceDetail(tmpDetail, parts))
+                {
+                    tmpDetail = null;
+                }
             }
         }
     }
-    
 
-    void DetailRotate(float xAngle, float yAngle, float zAngle)
+    bool TryTakeDetail(Part parts)
     {
-        if (tmpDetail == null) return;
+        bool result = parts != null;
 
-        float xRad = xAngle * speedRotate * Mathf.Deg2Rad;
-        float yRad = yAngle * speedRotate * Mathf.Deg2Rad;
-        float zRad = zAngle * speedRotate * Mathf.Deg2Rad;
+        if (result)
+        {
+            tmpDetail = parts;
+            tmpDetail.Taked();
+        }
+        return result;
+    }
 
-        Transform connectionPoint = tmpDetail.connectionPoints[0];
-        Vector3 yAxis = connectionPoint.up;
-        //test, delete this
-        testNormalStart = tmpDetail.transform.position;
-        testNormal = yAxis;
+    private Vector3 KeyBoardRotation()
+    {
+        Vector3 rotation = Vector3.zero;        
         
-        tmpDetail.transform.rotation = Quaternion.AngleAxis(yRad, yAxis)
-                                        * tmpDetail.transform.rotation;
+        if (Input.GetKey(KeyCode.Q))
+        {
+            rotation.y = -1;
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            rotation.y = 1;
+        }
 
-        Vector3 xAxis = Vector3.up;
-        tmpDetail.transform.RotateAround(connectionPoint.position,  xAxis, xRad);
+        if (Input.GetKey(KeyCode.R))
+        {
+            rotation.x = 1;
+        }
+        if (Input.GetKey(KeyCode.F))
+        {
+            rotation.x = -1;
+        }
 
-        Vector3 zAxis = Vector3.Cross(yAxis, xAxis);
-        if (zAxis.Equals(Vector3.zero))
-            zAxis = Vector3.forward;
-        tmpDetail.transform.RotateAround(connectionPoint.position, zAxis, zRad);
+        if (Input.GetKey(KeyCode.T))
+        {
+            rotation.z = 1;
+        }
+        if (Input.GetKey(KeyCode.G))
+        {
+            rotation.z = -1;
+        }
+
+        return rotation;
     }
 
-    private Vector3 testNormal = Vector3.up;
-    private Vector3 testNormalStart = Vector3.zero;
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(testNormalStart, testNormalStart + 3*testNormal);
-    }
 }

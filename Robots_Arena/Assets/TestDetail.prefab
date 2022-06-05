@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 6203555964444497062}
   - component: {fileID: 6203555964444497061}
   - component: {fileID: 6203555964444497060}
+  - component: {fileID: 7874545080408084074}
   m_Layer: 0
   m_Name: TestDetail
   m_TagString: Untagged
@@ -187,6 +188,24 @@ MonoBehaviour:
   - {fileID: 6203555964431369374}
   - {fileID: 6203555965255685506}
   meshRenderer: {fileID: 6203555964444497062}
+  colliders: []
+--- !u!114 &7874545080408084074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6203555964444497059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66cbee1c50c17314990cb1961a597729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectionPoints:
+  - {fileID: 6203555964431369374}
+  - {fileID: 6203555965255685506}
+  meshRenderer: {fileID: 6203555964444497062}
+  colliders: []
 --- !u!1 &6203555965255685505
 GameObject:
   m_ObjectHideFlags: 0
