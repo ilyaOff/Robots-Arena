@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ConstructorManager : MonoBehaviour
@@ -12,22 +13,19 @@ public class ConstructorManager : MonoBehaviour
     Part tmpDetail = null;
 
     [SerializeField]
-    public Installer placer;
-
-    [SerializeField]
-    private Installer[] placers;
-
-    /*private Vector3 testNormal = Vector3.up;
-    private Vector3 testNormalStart = Vector3.zero;
+    private Installer placer;
+    
+    private Vector3 testDirection = Vector3.up;
+    private Vector3 testFrom = Vector3.zero;
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(testNormalStart, testNormalStart + 3 * testNormal);
-    }*/
+        Gizmos.DrawLine(testFrom, testFrom + 3 * testDirection);
+    }
     private void Start()
     {
-        //placer = (Placer)Placer.CreateInstance(nameof(Placer));
-        placer = new SimpleInstaller();
+        placer = (Installer)ScriptableObject.CreateInstance(nameof(SimpleInstaller));
+        //placer = new SimpleInstaller();
     }
     public void StartPlacingPart(Part prefab)
     {
@@ -38,8 +36,7 @@ public class ConstructorManager : MonoBehaviour
             Destroy(tmpDetail.gameObject);
         }
 
-        tmpDetail = Instantiate(prefab, position, Quaternion.identity);
-        tmpDetail.Taked();
+        tmpDetail = placer.StartInstalling(prefab, position, Quaternion.identity);
     }
     void Update()
     {
@@ -48,21 +45,21 @@ public class ConstructorManager : MonoBehaviour
             button.onClick.Invoke();
         }
     }
-        
+
     void FixedUpdate()
     {
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Part parts = null;
-        Vector3 position = ray.origin + ray.direction * maxDistanceRay;        
-        
+        Vector3 position = ray.origin + ray.direction * maxDistanceRay;
+
         if (Physics.Raycast(ray, out hit, maxDistanceRay))
         {
             parts = hit.transform.GetComponentInParent<Part>();
             position = hit.point;
         }
 
-        if (tmpDetail == null)
+        if (tmpDetail is null)
         {
             if (Input.GetMouseButtonDown(0))
                 TryTakeDetail(parts);
@@ -70,7 +67,14 @@ public class ConstructorManager : MonoBehaviour
         else
         {
             placer.DetailRotate(tmpDetail, KeyBoardRotation());
-            placer.ChangeTransformDetail(tmpDetail, parts, position, hit.normal);
+
+            if (parts != null)
+            {
+                testFrom = parts.transform.position;
+                testDirection = parts.transform.up;
+            }
+            
+            placer.ChangePositionDetail(tmpDetail, parts, position, hit.normal);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -96,8 +100,8 @@ public class ConstructorManager : MonoBehaviour
 
     private Vector3 KeyBoardRotation()
     {
-        Vector3 rotation = Vector3.zero;        
-        
+        Vector3 rotation = Vector3.zero;
+
         if (Input.GetKey(KeyCode.Q))
         {
             rotation.y = -1;
@@ -128,4 +132,20 @@ public class ConstructorManager : MonoBehaviour
         return rotation;
     }
 
+    public void ChangeInstaller(Installer tunedInstaller)
+    {
+        if (tunedInstaller is null)
+        {
+            throw new ArgumentNullException("Tuned Installer must be not null!");
+        }
+        placer = (Installer)tunedInstaller;
+
+        //Исправить позже
+        if (tmpDetail != null)
+        {
+            Destroy(tmpDetail.gameObject);
+            tmpDetail = null;
+        }
+            
+    }
 }

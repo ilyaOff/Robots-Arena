@@ -32,7 +32,7 @@ public class Part : MonoBehaviour
         var childs = GetComponentsInChildren<Part>();
         foreach (var child in childs)
         {
-            child.Selected();            
+            child.Selected();
         }
     }
     private void Selected()
@@ -80,7 +80,4 @@ public class Part : MonoBehaviour
                                      meshRenderer.material.color.b,
                                      meshRenderer.material.color.a * 2);
     }
-
-    
-    //Change connection points
 }

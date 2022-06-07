@@ -1,30 +1,29 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
+[CreateAssetMenu(fileName = "newSimpleInstaller", menuName = "Installer/SimpleInstaller")]
 public class SimpleInstaller : Installer
 {
-    Vector3 oldPointPlaceDetail = Vector3.zero;//Problems??
     //Добавить модифицированный режим, в котором будет использоваться
     //[Range(0.005f, 0.4f)]
     //public float changePositionDistance = 0.1f;
-    public override void ChangeTransformDetail(Part tmpDetail, Part parts, Vector3 position, Vector3 surfaceNormal)
+    protected override void DetailTaked(Part prefab, Vector3 position, Quaternion rotation)
     {
-        Transform connectionPoint = tmpDetail.connectionPoint;
-        Vector3 shift = -connectionPoint.position + tmpDetail.transform.position;
-        //Точка пересечения луча + позиция точки привязки в префабе
-        tmpDetail.transform.position = position + shift;
+        return;
+    }
 
-        if (parts != null)
-        {
-            //Оптимизировать при медленной работе
-            //if(Vector3.Distance(oldPointPlaceDetail, position) < changePositionDistance)
-            if (!oldPointPlaceDetail.Equals(position))
-            {
-                oldPointPlaceDetail = position;
-                tmpDetail.transform.rotation =
-                    Quaternion.FromToRotation(connectionPoint.up, surfaceNormal)
-                    * tmpDetail.transform.rotation;
-            }
-        }
+    protected override void MissingFastener()
+    {
+        return;
+    }
+
+    protected override void OptionChangePositionDetail(Part tmpDetail, Part parts)
+    {
+        return;
+    }
+
+    protected override void OptionPlaceDetail(Part fasteningPart)
+    {
+        return;
     }
 }

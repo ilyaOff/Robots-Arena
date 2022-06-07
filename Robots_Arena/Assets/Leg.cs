@@ -8,10 +8,8 @@ public class Leg : MonoBehaviour
     public float HorizontalTargetPosition => horizontalJoint.spring.targetPosition;
     public float VerticalTargetPosition => verticalJoint.spring.targetPosition;
     public float KneeTargetPosition => kneeJoint.spring.targetPosition;
-    // Start is called before the first frame update
 
     float time = 0f;
-    // Update is called once per frame
     void FixedUpdate()
     {
         time += Time.fixedDeltaTime;
