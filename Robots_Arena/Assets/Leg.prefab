@@ -123,8 +123,8 @@ HingeJoint:
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 1000
-    damper: 200
+    spring: 10000
+    damper: 2000
     targetPosition: 45
   m_UseMotor: 0
   m_Motor:
@@ -268,8 +268,8 @@ HingeJoint:
   m_ConnectedAnchor: {x: 0.525, y: 0, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 1000
-    damper: 200
+    spring: 10000
+    damper: 2000
     targetPosition: -120
   m_UseMotor: 0
   m_Motor:
@@ -336,7 +336,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7907480670359020280}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -602,9 +602,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1fda68ebe930404ba8665d775bf2e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalJoint: {fileID: 7907480671777771969}
-  verticalJoint: {fileID: 7907480670201585778}
+  verticalJoint: {fileID: 7907480671777771969}
+  hipJoint: {fileID: 7907480670201585778}
   kneeJoint: {fileID: 7907480670345762489}
+  connection: {fileID: 7907480671034158474}
 --- !u!1 &7907480671777771971
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,8 +715,8 @@ HingeJoint:
   m_ConnectedAnchor: {x: 0.018012524, y: 0, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 500
-    damper: 100
+    spring: 10000
+    damper: 2000
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
