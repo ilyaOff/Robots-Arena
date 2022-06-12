@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CircularSymmetricalInstaller
   m_EditorClassIdentifier: 
   speedRotate: 90
-  countClones: 2
+  countClones: 5
