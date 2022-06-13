@@ -7,6 +7,7 @@ using UnityEngine;
 public class LegController : MonoBehaviour
 {
     [SerializeField] private List<Leg> legs;
+    public int CountLegs => legs.Count;
 
     private Rigidbody body;
 
@@ -30,37 +31,65 @@ public class LegController : MonoBehaviour
             leg.AttachToBody(body);
         }
 
-        NewBrain();
+        //NewBrain();
     }
 
-    private void NewBrain()
+    public void NewBrain(NeuralNetwork brain)
     {
-        int inputLayer = 3//dimension of Target
-                + legs.Count * 3;//angle of leg                
-        int outputLayer = +legs.Count * 3;//angle of leg
-                
-        brain = new NeuralNetwork(new int[]
-                    {
-                        inputLayer, outputLayer
-                    });
-        inputBrain = new float[inputLayer];
-        calculateAngle = new float[outputLayer];
+        this.brain = brain; 
+        inputBrain = new float[brain.Inputs];
+        calculateAngle = new float[brain.Outputs];
     }
 
+    public bool TryChangeTarget(Transform newTarget)
+    { 
+        if(newTarget != null)
+        {
+            target = newTarget;
+            return true;
+        }
+
+        return false;
+    }
+    
+    private void Update()
+    {
+        /*if (Input.GetKeyDown(KeyCode.O))
+        {
+            NewBrain();
+        }*/
+            
+    }
+    
     private void FixedUpdate()
     {
         calculateAngle = CalculateBrain();
         for (int i = 0; i < legs.Count; i++)
         {
-            legs[i].NormalizeVerticalAngle = calculateAngle[3*i];
-            legs[i].NormalizeHipAngle = calculateAngle[3*i+1];            
-            legs[i].NormalizeKneeAngle = calculateAngle[3*i+2];
+             
+             legs[i].NormalizeVerticalAngle = Mathf.Sin(Time.time * calculateAngle[3 * i]);
+             legs[i].NormalizeHipAngle = Mathf.Sin(Time.time * calculateAngle[3 * i + 1]);
+             legs[i].NormalizeKneeAngle = Mathf.Sin(Time.time * calculateAngle[3 * i + 2]);
+             
+             /*
+            legs[i].NormalizeVerticalAngle = (calculateAngle[3 * i]*2-1)*Mathf.Sin(Time.time );
+            legs[i].NormalizeHipAngle = (calculateAngle[3 * i+1] * 2 - 1) * Mathf.Sin(Time.time);
+            legs[i].NormalizeKneeAngle = (calculateAngle[3 * i+2] * 2 - 1) * Mathf.Sin(Time.time);
+            */
+            /*
+            legs[i].NormalizeVerticalAngle = calculateAngle[3 * i];
+            legs[i].NormalizeHipAngle = calculateAngle[3 * i + 1];
+            legs[i].NormalizeKneeAngle = calculateAngle[3 * i + 2];
+            */
         }
+        //Debug.Log(calculateAngle[0] + " " + Mathf.Sin(Time.time * calculateAngle[0]));
     }
 
     private float[] CalculateBrain()
     {
-        Vector3 direction = (target.position - transform.position).normalized;
+        Vector3 direction = Vector3.zero;
+        if(target != null)
+         direction = (target.position - transform.position).normalized;
 
         inputBrain[0] = direction.x;
         inputBrain[1] = direction.y;
@@ -72,7 +101,7 @@ public class LegController : MonoBehaviour
             inputBrain[3 * i + 4] = legs[i].NormalizeHipAngle;
             inputBrain[3 * i + 5] = legs[i].NormalizeKneeAngle;
         }
-
+      
         return brain.CalculeteOutput(inputBrain);
     }
 }

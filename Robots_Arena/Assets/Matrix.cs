@@ -3,8 +3,8 @@ public class Matrix
 {
     private float[,] matrix;
 
-    public int Columns => matrix.GetUpperBound(1);
-    public int Rows => matrix.GetUpperBound(0);
+    public int Columns => matrix.GetUpperBound(1)+1;
+    public int Rows => matrix.GetUpperBound(0)+1;
 
     public Matrix(float[] value)
     {

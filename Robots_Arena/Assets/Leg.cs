@@ -79,7 +79,7 @@ public class Leg : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         vertical = new HingeJointController(verticalJoint);
         hip = new HingeJointController(hipJoint);
