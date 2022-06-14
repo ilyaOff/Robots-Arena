@@ -57,7 +57,7 @@ public class NeuralNetwork
         }
         return new NeuralNetwork(layers);
     }
-
+    
     public static NeuralNetwork OneMutation(NeuralNetwork original)
     {
         NeuralNetwork newBrain = new NeuralNetwork(original);

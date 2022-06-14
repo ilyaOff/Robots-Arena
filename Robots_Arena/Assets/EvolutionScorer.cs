@@ -6,19 +6,19 @@ using UnityEngine;
 [RequireComponent(typeof(LegController))]
 public class EvolutionScorer : MonoBehaviour
 {
-    [SerializeField] private float pointsGameOver = -100f;
+    [SerializeField] private float pointsGameOver = -500f;
 
-    [SerializeField] private float pointsForTime = -0.001f;
+    [SerializeField] private float pointsForMoving = 0.001f;
+    Vector3 oldPosition;
 
-    [SerializeField] private float pointsForBalance = -0.002f;
+    [SerializeField] private float pointsForBalance = 0.01f;
     private Vector3 targetUp = Vector3.up;
 
     [SerializeField] private float pointsForMovingToTarget = 0.1f;
-    private float oldDistance;
     private Transform target;
     public LegController controller;
 
-    [SerializeField] private float pointsForReachingGoal = 10f;
+    [SerializeField] private float pointsForReachingGoal = 100f;
 
     public float Score { get; private set; }
     
@@ -26,7 +26,6 @@ public class EvolutionScorer : MonoBehaviour
     {
         target = newTarget.transform;
         controller.TryChangeTarget(target);
-        oldDistance = Vector3.Distance(target.position, transform.position);
     }
 
     private void Awake()
@@ -37,12 +36,13 @@ public class EvolutionScorer : MonoBehaviour
     private void OnEnable()
     {
         Score = 0;
+        oldPosition = transform.position;
         //Debug.LogError("0 score");
     }
 
     private void FixedUpdate()
     {        
-        PointsForTime();
+        //PointsForMoving();
         PointsForBalance();
         PointsForMovingToTarget();
     }
@@ -54,7 +54,7 @@ public class EvolutionScorer : MonoBehaviour
     private void PointsForMovingToTarget()
     {
         float distance = Vector3.Distance(transform.position, target.position);
-        Score += (oldDistance - distance) * pointsForMovingToTarget;
+        Score += (3f - distance) * pointsForMovingToTarget;
     }
 
     private void PointsForBalance()
@@ -63,9 +63,10 @@ public class EvolutionScorer : MonoBehaviour
         //Debug.Log(angle);
         if (angle > 45f)
         {
-            GameOver();
+            Score += ( - angle) * pointsForBalance * Time.fixedDeltaTime;
         }
-        Score += angle * pointsForBalance;
+        
+        Score += (5-angle) * pointsForBalance*Time.fixedDeltaTime;
     }
 
     private void GameOver()
@@ -74,9 +75,12 @@ public class EvolutionScorer : MonoBehaviour
         this.enabled = false;
     }
 
-    private void PointsForTime()
+    private void PointsForMoving()
     {
-        Score += pointsForTime;        
+        float distance = Vector3.Distance(oldPosition, transform.position);       
+        Score += pointsForMoving*(distance- 0.015f);
+        
+        oldPosition = transform.position;
     }
 
 }
