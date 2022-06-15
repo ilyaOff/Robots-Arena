@@ -5,12 +5,13 @@ using UnityEngine.Events;
 
 public class TargetRobots : MonoBehaviour
 {
-    private EvolutionarySelection selector;
     private EvolutionScorer robot;
+    private EvolutionRoom room;
 
-    public void SetSelector(EvolutionarySelection selector)
+    //public UnityEvent Succes = new UnityEvent();
+    public void SetRoom(EvolutionRoom room)
     {
-        this.selector = selector;
+        this.room = room;
     }
 
     public void SetRobot(EvolutionScorer robot)
@@ -29,7 +30,8 @@ public class TargetRobots : MonoBehaviour
             scorer.PointsForReachingGoal();
             enabled = false;
             //Debug.Log("I'm sleep");
-            selector.PlaceTarget(this, scorer);
+            //Succes?.Invoke();
+            room.PlaceTarget();
         }
             
     }

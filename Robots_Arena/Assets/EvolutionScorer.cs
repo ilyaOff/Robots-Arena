@@ -12,11 +12,14 @@ public class EvolutionScorer : MonoBehaviour
     Vector3 oldPosition;
 
     [SerializeField] private float pointsForBalance = 0.01f;
+    private float scoreBalance = 0;
     private Vector3 targetUp = Vector3.up;
 
     [SerializeField] private float pointsForMovingToTarget = 0.1f;
     private Transform target;
     public LegController controller;
+
+    [SerializeField] private float pointsForRotateToTarget = 0.001f;
 
     [SerializeField] private float pointsForReachingGoal = 100f;
 
@@ -36,6 +39,7 @@ public class EvolutionScorer : MonoBehaviour
     private void OnEnable()
     {
         Score = 0;
+        scoreBalance = 0;
         oldPosition = transform.position;
         //Debug.LogError("0 score");
     }
@@ -43,13 +47,24 @@ public class EvolutionScorer : MonoBehaviour
     private void FixedUpdate()
     {        
         //PointsForMoving();
-        PointsForBalance();
         PointsForMovingToTarget();
+        PointsForRotateToTarget();
+    }
+
+    private void PointsForRotateToTarget()
+    {
+        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+        Vector3 direction = Vector3.ProjectOnPlane(target.position - transform.position, Vector3.up);
+        float angle = Vector3.Angle(forward, direction);
+        Score += pointsForRotateToTarget* Mathf.Max(0, (10f - angle) );
     }
 
     public void PointsForReachingGoal()
     {
         Score += pointsForReachingGoal;
+        Score += scoreBalance;
+        scoreBalance = 0;
+        PointsForBalance();
     }
     private void PointsForMovingToTarget()
     {
@@ -63,10 +78,17 @@ public class EvolutionScorer : MonoBehaviour
         //Debug.Log(angle);
         if (angle > 45f)
         {
-            Score += ( - angle) * pointsForBalance * Time.fixedDeltaTime;
+            scoreBalance += ( - angle) * pointsForBalance * Time.fixedDeltaTime;
+        }
+        if (angle < 5f)
+        {
+            scoreBalance += 2 * pointsForBalance * Time.fixedDeltaTime;
+        }
+        else if (angle < 45f)
+        {
+            scoreBalance +=  pointsForBalance * Time.fixedDeltaTime;
         }
         
-        Score += (5-angle) * pointsForBalance*Time.fixedDeltaTime;
     }
 
     private void GameOver()
@@ -77,8 +99,8 @@ public class EvolutionScorer : MonoBehaviour
 
     private void PointsForMoving()
     {
-        float distance = Vector3.Distance(oldPosition, transform.position);       
-        Score += pointsForMoving*(distance- 0.015f);
+        float distance = Vector3.Distance(oldPosition, transform.position);
+        Score += pointsForMoving*Mathf.Max(0, (distance- 0.015f));
         
         oldPosition = transform.position;
     }

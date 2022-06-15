@@ -49,7 +49,7 @@ public class NeuralNetworkLayer
 
         for (int i = 0; i < Rows; i++)
         {
-            NeuralNetworkLayer layerRows = null;
+            /*NeuralNetworkLayer layerRows = null;
             if (UnityEngine.Random.Range(0, 2) % 2 == 0)
             {
                 layerRows = first;
@@ -61,6 +61,18 @@ public class NeuralNetworkLayer
             for (int j = 0; j < Columns; j++)
             {
                 weight[i, j] = layerRows.weights[i, j];
+            }*/
+            for (int j = 0; j < Columns; j++)
+            {
+                if (UnityEngine.Random.Range(0, 2) % 2 == 0)
+                {
+                    weight[i, j] = first.weights[i, j];
+                }
+                else
+                {
+                    weight[i, j] = second.weights[i, j];
+                }
+                
             }
         }
         Matrix offset = new Matrix(1, Columns);

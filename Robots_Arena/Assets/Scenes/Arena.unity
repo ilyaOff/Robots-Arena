@@ -267,7 +267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695133721}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.3061342, y: -0.188977, z: 38.2}
+  m_LocalPosition: {x: 82.6, y: -0.188977, z: 84.3}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children: []
   m_Father: {fileID: 0}
@@ -283,6 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 850925898}
   - component: {fileID: 850925899}
+  - component: {fileID: 850925900}
   m_Layer: 0
   m_Name: Placer
   m_TagString: Untagged
@@ -316,16 +317,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7fa5568e942f842b5a1dd358a96b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1737245668938278098, guid: ac40386ff6fa6e7468c8d964bf6aaaa3, type: 3}
-  targetPrefab: {fileID: 3273090566970125891, guid: 35f9104b694a85e4f888aa9b65c0f75e,
-    type: 3}
+  fabric: {fileID: 850925900}
   countEpochs: 10000
+  numberAddTimeEpochs: 1000
   countAgents: 100
   selectionPercentage: 30
   crossingPercentage: 30
   mutationPercentage: 30
   MaxTime: 1
   AddTime: 1
+--- !u!114 &850925900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850925897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd4176379aa3e8240beb546c2dfddf91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1737245668938278098, guid: ac40386ff6fa6e7468c8d964bf6aaaa3, type: 3}
+  targetPrefab: {fileID: 3273090566970125891, guid: 35f9104b694a85e4f888aa9b65c0f75e,
+    type: 3}
+  roomPrefab: {fileID: 5047623475655046509, guid: 35816f14e97697143be3a64094629c06,
+    type: 3}
+  distanceBetweenRooms: 10
 --- !u!1 &1672488455
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,13 +420,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672488455}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0, y: 0.43475965, z: 0, w: 0.90054655}
+  m_LocalPosition: {x: -4.61, y: 7.38, z: -5.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 51.54, z: 0}
 --- !u!114 &1672488459
 MonoBehaviour:
   m_ObjectHideFlags: 0
