@@ -319,13 +319,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fabric: {fileID: 850925900}
   countEpochs: 10000
-  numberAddTimeEpochs: 1000
+  numberAddTimeEpochs: 100
+  countAddTimeEpochs: 100
   countAgents: 100
   selectionPercentage: 30
   crossingPercentage: 30
   mutationPercentage: 30
   MaxTime: 1
-  AddTime: 1
+  AddTime: 0.1
 --- !u!114 &850925900
 MonoBehaviour:
   m_ObjectHideFlags: 0

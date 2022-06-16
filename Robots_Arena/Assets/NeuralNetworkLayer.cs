@@ -162,5 +162,15 @@ public class NeuralNetworkLayer
         float result = (float)Math.Exp(2*input);
         return (result - 1) / (result + 1);
     }
+
+    private float Sin(float input)
+    {
+        return (float)Math.Sin(Math.PI * input);
+    }
+
+    private float NonChange(float input)
+    {
+        return input;
+    }
 }
 

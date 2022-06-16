@@ -6,7 +6,7 @@ public class EvolutionRoom : MonoBehaviour
 {
     [SerializeField] private Transform[] goals;
     [SerializeField] private int currentGoal = 0;
-    private int startGoal = 3;
+    private int startGoal = -1;
     [SerializeField] private Transform StartAgent;
 
     [SerializeField] private TargetRobots target;

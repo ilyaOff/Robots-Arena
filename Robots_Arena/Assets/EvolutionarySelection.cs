@@ -1,6 +1,4 @@
-﻿//using System;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,22 +8,31 @@ public class EvolutionarySelection : MonoBehaviour
 
     [SerializeField] private int countEpochs = 10;
     private int numberEpochs = 0;
+    private int round = 0;
 
     [SerializeField] private int numberAddTimeEpochs = 100;
     [SerializeField] private int countAddTimeEpochs = 100;
 
     [SerializeField] private int countAgents = 10;
 
-    [Range(5, 30)]
+    [Range(5, 50)]
     [SerializeField] private int selectionPercentage = 25;
-    private int survivors;
+    public int Survivors => Mathf.Max(1, countAgents * selectionPercentage / 100);
 
-    [Range(0, 50)]
+    [Range(0, 75)]
     [SerializeField] private int crossingPercentage = 25;
-    private int crossed;
+    private int Crossed => countAgents* crossingPercentage / 100;
+
+    /*[Range(0, 50)]
+    [SerializeField] private int randomPercentage = 25;
+    private int randomed;
+    */
 
     [Range(1, 75)]
     [SerializeField] private int mutationPercentage = 25;
+
+    [Range(1, 75)]
+    [SerializeField] private int mutationLitePercentage = 25;
 
     private List<EvolutionRoom> rooms;
 
@@ -42,15 +49,15 @@ public class EvolutionarySelection : MonoBehaviour
         int inputLayer = 3//dimension of Target
                     + 1//Distance to target
                     + 2//Angles between forward and direction to target
-                    + 1;//timer
-                    //+ countLegs * 3;// prefab.CountLegs //angle of leg                
+                    + 1//timer
+                    + countLegs * 3;// prefab.CountLegs //angle of leg                
         int outputLayer = countLegs * 3;//angle of leg
 
         return new NeuralNetwork(new int[]
                         {
                         inputLayer,
                         //outputLayer*2,
-                        inputLayer,
+                        //inputLayer,
                         //outputLayer*2,
                         //5, 4,
                         outputLayer
@@ -58,14 +65,11 @@ public class EvolutionarySelection : MonoBehaviour
     }
     private void Start()
     {
-        survivors = Mathf.Max(1, countAgents * selectionPercentage / 100);
-        crossed = countAgents * crossingPercentage / 100;
-
-        brains = new List<NeuralNetwork>(countAgents);
-        greatBrains = new List<ScoreBrain>(countAgents);
+        brains = new List<NeuralNetwork>();
+        greatBrains = new List<ScoreBrain>();
 
         rooms = fabric.Create(countAgents);
-
+        Random.InitState(123456);
         StartInitialEpochs();
     }
 
@@ -99,28 +103,43 @@ public class EvolutionarySelection : MonoBehaviour
     private void StartInitialEpochs()
     {
         numberEpochs = 1;
-
-        brains.Clear();
-        greatBrains.Clear();
-
-        NewBrains(0, 0);
+        NewBrains(0);
 
         RestartRooms();
     }
 
     private void StartEpochs()
     {
-        numberEpochs++;
-        Debug.Log($"Epochs:{numberEpochs}");
+        round++;
+        if (round >= 2)
+        {
+            numberEpochs++;
+            Debug.Log($"Epochs:{numberEpochs}");
+            round = 0;
+        }        
 
         BrainSelection();
-        Crossings();
-        int mutant = Mutations();
-        NewBrains(crossed, mutant);
-        RestartRooms();
 
-        int countDead = Mathf.Max(0, greatBrains.Count - survivors);
-        greatBrains.RemoveRange(survivors, countDead);
+        int newAgent = 0;
+        switch (round)
+        {
+            case 0:
+                newAgent += LiteMutations();
+                newAgent += Mutations();
+                break;
+            case 1:
+                newAgent += Crossings();
+                break;
+        }
+
+        int countDead = Mathf.Max(0, greatBrains.Count - Survivors);
+        greatBrains.RemoveRange(Survivors, countDead);
+        
+        //greatBrains.Clear();
+
+        NewBrains(newAgent);
+
+        RestartRooms();
 
         if (numberEpochs > countAddTimeEpochs)
         {
@@ -145,7 +164,7 @@ public class EvolutionarySelection : MonoBehaviour
         }
         brains.Clear();
 
-        for (int i = 0; i < survivors; i++)
+        for (int i = 0; i < Survivors; i++)
         {
             for (int j = greatBrains.Count - 2; j >= i; j--)
             { 
@@ -159,41 +178,53 @@ public class EvolutionarySelection : MonoBehaviour
         }
         
         Debug.Log($"Max Scope:{greatBrains[0].Score}, " +
-            $"New brain Scope:{greatBrains[survivors].Score}, " +
+            $"New brain Scope:{greatBrains[Survivors-1].Score}, " +
             $"Min Scope:{greatBrains[greatBrains.Count-1].Score}");
     }
 
-    private void Crossings()
+    private int Crossings()
     {
-        int max = greatBrains.Count;
-        for (int i = 0; i < crossed; i++)
+        for (int i = 0; i < Crossed; i++)
         {
-            int brain1 = UnityEngine.Random.Range(0, survivors);
-            int brain2 = UnityEngine.Random.Range(0, survivors);
+            int brain1 = Random.Range(0, Survivors);
+            int brain2 = Random.Range(0, Survivors);
 
             NeuralNetwork brain = NeuralNetwork.Crossing(greatBrains[brain1].Brain,
                                                           greatBrains[brain2].Brain);
             brains.Add(brain);
         }
+        return Crossed;
     }
 
+    private int LiteMutations()
+    {
+        int mutants = 0;
+
+        for (int i = 0; i < Survivors; i++)
+        {
+            if (UnityEngine.Random.Range(0, 100) < mutationLitePercentage)
+            {
+                NeuralNetwork brain = NeuralNetwork.OneMutation(greatBrains[i].Brain);
+
+                brains.Add(brain);
+                mutants++;
+            }
+        }
+
+        return mutants;
+    }
     private int Mutations()
     {
         int mutants = 0;
-        //int max = Mathf.Min(2*survivors, );
-        for (int i = 0; i < greatBrains.Count; i++)
+
+		for (int i = 0; i < Survivors; i++)
         {
-            if (UnityEngine.Random.Range(0, 100) < mutationPercentage)
+            if (Random.Range(0, 100) < mutationPercentage)
             {
-                NeuralNetwork brain;
-                if (i < survivors)
-                {
-                    brain = NeuralNetwork.OneMutation(greatBrains[i].Brain);
-                }
-                else
-                {
-                     brain = NeuralNetwork.Crossing(greatBrains[i- survivors].Brain, CreateBrain());
-                }
+                int random = Random.Range(Survivors, greatBrains.Count);
+                NeuralNetwork brain = NeuralNetwork.Crossing(
+                                 greatBrains[random].Brain,
+                                greatBrains[i].Brain);                
 
                 brains.Add(brain);
                 mutants++;
@@ -203,16 +234,16 @@ public class EvolutionarySelection : MonoBehaviour
         return mutants;
     }
 
-    private void NewBrains(int crossed, int mutant)
+    private void NewBrains(int newAgents)
     {
-        int newAgents = countAgents - crossed - mutant;
-        if (newAgents < 0)
+        int randomAgents = countAgents - newAgents;
+        if (randomAgents < 0)
         {
             brains.RemoveRange(countAgents, -newAgents);
             return;
         }
 
-        for (int i = 0; i < newAgents; i++)
+        for (int i = 0; i < randomAgents; i++)
         {
             brains.Add(CreateBrain());
         }

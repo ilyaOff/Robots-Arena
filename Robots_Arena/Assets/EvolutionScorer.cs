@@ -45,8 +45,9 @@ public class EvolutionScorer : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {        
+    {
         //PointsForMoving();
+        PointsForBalance();
         PointsForMovingToTarget();
         PointsForRotateToTarget();
     }
@@ -78,7 +79,8 @@ public class EvolutionScorer : MonoBehaviour
         //Debug.Log(angle);
         if (angle > 45f)
         {
-            scoreBalance += ( - angle) * pointsForBalance * Time.fixedDeltaTime;
+            GameOver();
+            //scoreBalance += ( - angle) * pointsForBalance * Time.fixedDeltaTime;
         }
         if (angle < 5f)
         {

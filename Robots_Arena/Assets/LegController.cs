@@ -112,14 +112,15 @@ public class LegController : MonoBehaviour
 
     private float[] CalculateBrain()
     {
-        /*for (int i = 0; i < legs.Count; i++)
+        int shift = 0;
+        for (int i = 0; i < legs.Count; i++)
         {
             inputBrain[3 * i] = legs[i].NormalizeVerticalAngle;
             inputBrain[3 * i + 1] = legs[i].NormalizeHipAngle;
             inputBrain[3 * i + 2] = legs[i].NormalizeKneeAngle;
-        }*/
-        int shift = 0;
-        //shift = 3 * legs.Count;
+        }
+
+        shift = 3 * legs.Count;
 
         Vector3 direction = Vector3.zero;
         if (target != null)
