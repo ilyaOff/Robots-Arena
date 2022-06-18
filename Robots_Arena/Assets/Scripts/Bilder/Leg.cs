@@ -98,4 +98,11 @@ public class Leg : MonoBehaviour
             Destroy(connection);
         }
     }
+
+    public void Restart()
+    {
+        vertical.Restart();
+        hip.Restart();
+        knee.Restart();
+    }
 }

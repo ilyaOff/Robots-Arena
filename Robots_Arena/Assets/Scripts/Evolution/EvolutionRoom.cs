@@ -70,7 +70,10 @@ public class EvolutionRoom : MonoBehaviour
 
     public void Stop()
     {
+        //agent.Score += agent.transform.position.z - StartAgent.position.z;
+       
         agent.controller.InitialPosition();
+        PlaceAgent();
         agent.enabled = false;
     }
 

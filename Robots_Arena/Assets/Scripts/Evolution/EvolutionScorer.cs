@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(LegController))]
 public class EvolutionScorer : MonoBehaviour
 {
-    [SerializeField] private float pointsGameOver = -500f;
+    [SerializeField] private float pointsGameOver = -50f;
 
     [SerializeField] private float pointsForMoving = 0.001f;
     Vector3 oldPosition;
@@ -15,15 +15,16 @@ public class EvolutionScorer : MonoBehaviour
     private float scoreBalance = 0;
     private Vector3 targetUp = Vector3.up;
 
-    [SerializeField] private float pointsForMovingToTarget = 0.1f;
+    [SerializeField] private float pointsForMovingToTarget = 0.01f;
     private Transform target;
     public LegController controller;
 
-    [SerializeField] private float pointsForRotateToTarget = 0.001f;
+    [SerializeField] private float pointsForRotateToTarget = 0.01f;
 
-    [SerializeField] private float pointsForReachingGoal = 100f;
+    [SerializeField] private float pointsForReachingGoal = 1000f;
 
     public float Score { get; private set; }
+    [SerializeField] private float score = 0f;
     
     public void ChangeTarget(TargetRobots newTarget)
     {
@@ -44,12 +45,21 @@ public class EvolutionScorer : MonoBehaviour
         //Debug.LogError("0 score");
     }
 
+    private void OnDisable()
+    {
+        /*float angle = Vector3.Angle(transform.up, targetUp);
+        Score += pointsForBalance / (0.001f + angle);
+        */
+    }
+
     private void FixedUpdate()
     {
         //PointsForMoving();
         PointsForBalance();
         PointsForMovingToTarget();
         PointsForRotateToTarget();
+        
+        score = Score;
     }
 
     private void PointsForRotateToTarget()
@@ -57,7 +67,8 @@ public class EvolutionScorer : MonoBehaviour
         Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
         Vector3 direction = Vector3.ProjectOnPlane(target.position - transform.position, Vector3.up);
         float angle = Vector3.Angle(forward, direction);
-        Score += pointsForRotateToTarget* Mathf.Max(0, (10f - angle) );
+        angle = Mathf.Abs(angle);
+        Score += pointsForRotateToTarget/(1f+angle);
     }
 
     public void PointsForReachingGoal()
@@ -65,12 +76,12 @@ public class EvolutionScorer : MonoBehaviour
         Score += pointsForReachingGoal;
         Score += scoreBalance;
         scoreBalance = 0;
-        PointsForBalance();
     }
+
     private void PointsForMovingToTarget()
     {
         float distance = Vector3.Distance(transform.position, target.position);
-        Score += (3f - distance) * pointsForMovingToTarget;
+        Score += 1/(0.001f + distance )* pointsForMovingToTarget;
     }
 
     private void PointsForBalance()
@@ -79,16 +90,12 @@ public class EvolutionScorer : MonoBehaviour
         //Debug.Log(angle);
         if (angle > 45f)
         {
-            GameOver();
+            //GameOver();
             //scoreBalance += ( - angle) * pointsForBalance * Time.fixedDeltaTime;
         }
-        if (angle < 5f)
+        //if (angle < 5f)
         {
-            scoreBalance += 2 * pointsForBalance * Time.fixedDeltaTime;
-        }
-        else if (angle < 45f)
-        {
-            scoreBalance +=  pointsForBalance * Time.fixedDeltaTime;
+            scoreBalance +=  pointsForBalance / (1f + angle);
         }
         
     }
@@ -96,6 +103,7 @@ public class EvolutionScorer : MonoBehaviour
     private void GameOver()
     {
         Score += pointsGameOver;
+        scoreBalance = 0;
         this.enabled = false;
     }
 

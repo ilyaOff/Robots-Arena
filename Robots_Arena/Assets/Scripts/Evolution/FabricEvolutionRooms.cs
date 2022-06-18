@@ -21,6 +21,7 @@ public class FabricEvolutionRooms : MonoBehaviour
         for (int i = 0; i < Quantity; i++)
         {
             EvolutionRoom room = Instantiate(roomPrefab);
+            room.name += i;
             room.transform.position = Position(i, wallLengthForward, distanceBetweenRooms);
             rooms.Add(room);
         }
@@ -28,7 +29,7 @@ public class FabricEvolutionRooms : MonoBehaviour
         { 
             LegController robot = Instantiate(prefab);
             EvolutionScorer agent = robot.gameObject.AddComponent<EvolutionScorer>();
-
+            agent.name += i;
             TargetRobots target = Instantiate(targetPrefab);
 
             rooms[i].Initialize(agent, target);

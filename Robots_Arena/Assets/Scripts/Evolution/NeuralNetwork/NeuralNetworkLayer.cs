@@ -1,8 +1,8 @@
 ﻿using System;
-public class NeuralNetworkLayer
+public struct NeuralNetworkLayer
 {
-    private Matrix weights = null;
-    private Matrix offset = null;
+    private Matrix weights;// = null;
+    private Matrix offset;// = null;
     public float[,] Weight => weights;
     public int numberInputs => weights.Rows;
     public int numberOutputs => weights.Columns;

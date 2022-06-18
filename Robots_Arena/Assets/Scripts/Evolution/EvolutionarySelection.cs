@@ -48,8 +48,7 @@ public class EvolutionarySelection : MonoBehaviour
         int countLegs = 6;
         int inputLayer = 3//dimension of Target
                     + 1//Distance to target
-                    + 2//Angles between forward and direction to target
-                    + 1//timer
+                    + 2//Angles between forward and direction to target                   
                     + countLegs * 3;// prefab.CountLegs //angle of leg                
         int outputLayer = countLegs * 3;//angle of leg
 
@@ -57,7 +56,7 @@ public class EvolutionarySelection : MonoBehaviour
                         {
                         inputLayer,
                         //outputLayer*2,
-                        //inputLayer,
+                        6,
                         //outputLayer*2,
                         //5, 4,
                         outputLayer
@@ -68,7 +67,8 @@ public class EvolutionarySelection : MonoBehaviour
         brains = new List<NeuralNetwork>();
         greatBrains = new List<ScoreBrain>();
 
-        rooms = fabric.Create(countAgents);
+        rooms = fabric.Create(countAgents+1);
+        Debug.Log(rooms[countAgents].transform.position);
         Random.InitState(123456);
         StartInitialEpochs();
     }
@@ -80,8 +80,9 @@ public class EvolutionarySelection : MonoBehaviour
         if (timer >= MaxTime)
         {
             EndEpochs();
-            Invoke(nameof(StartEpochs), 1f);            
-            timer = -1f;
+            StartEpochs();
+            //Invoke(nameof(StartEpochs), 1f);            
+            timer = 0;
         }
     }
 
@@ -104,7 +105,7 @@ public class EvolutionarySelection : MonoBehaviour
     {
         numberEpochs = 1;
         NewBrains(0);
-
+        greatBrains.Add(new ScoreBrain(brains[0], -1000));
         RestartRooms();
     }
 
@@ -116,30 +117,30 @@ public class EvolutionarySelection : MonoBehaviour
             numberEpochs++;
             Debug.Log($"Epochs:{numberEpochs}");
             round = 0;
-        }        
-
-        BrainSelection();
+        }
 
         int newAgent = 0;
+
+        newAgent += BrainSelection();
         switch (round)
         {
-            case 0:
-                newAgent += LiteMutations();
+            case 0:                
                 newAgent += Mutations();
+                newAgent += LiteMutations();
                 break;
             case 1:
                 newAgent += Crossings();
                 break;
         }
 
-        int countDead = Mathf.Max(0, greatBrains.Count - Survivors);
-        greatBrains.RemoveRange(Survivors, countDead);
-        
-        //greatBrains.Clear();
-
         NewBrains(newAgent);
 
         RestartRooms();
+
+        /*int countDead = Mathf.Max(0, greatBrains.Count - Survivors);
+       greatBrains.RemoveRange(Survivors, countDead);
+       */
+        greatBrains.Clear();
 
         if (numberEpochs > countAddTimeEpochs)
         {
@@ -150,21 +151,24 @@ public class EvolutionarySelection : MonoBehaviour
 
     private void RestartRooms()
     {
-        for (int i = 0; i < rooms.Count; i++)
+        for (int i = 0; i < rooms.Count-1; i++)
         {
             rooms[i].Restart(brains[i]);
         }
+        rooms[rooms.Count - 1].Restart(greatBrains[0].Brain);
     }
 
-    private void BrainSelection()
+    private int BrainSelection()
     {
+        Debug.Log($"Replay:{rooms[brains.Count].Score}");
+
         for (int i = 0; i < brains.Count; i++)
         {
             greatBrains.Add(new ScoreBrain(brains[i], rooms[i].Score));
         }
         brains.Clear();
 
-        for (int i = 0; i < Survivors; i++)
+        /*for (int i = 0; i < /*Survivors greatBrains.Count; i++)
         {
             for (int j = greatBrains.Count - 2; j >= i; j--)
             { 
@@ -175,11 +179,18 @@ public class EvolutionarySelection : MonoBehaviour
                     greatBrains[j+1] = brain;
                 }
             }
+        }*/
+        for (int i = 0; i < Survivors; i++)
+        {
+            brains.Add(greatBrains[i].Brain);
         }
         
+
         Debug.Log($"Max Scope:{greatBrains[0].Score}, " +
             $"New brain Scope:{greatBrains[Survivors-1].Score}, " +
             $"Min Scope:{greatBrains[greatBrains.Count-1].Score}");
+
+        return Survivors;
     }
 
     private int Crossings()
@@ -215,8 +226,10 @@ public class EvolutionarySelection : MonoBehaviour
     }
     private int Mutations()
     {
-        int mutants = 0;
+        if (Survivors > greatBrains.Count) return 0;
 
+        int mutants = 0;
+        
 		for (int i = 0; i < Survivors; i++)
         {
             if (Random.Range(0, 100) < mutationPercentage)
@@ -234,12 +247,12 @@ public class EvolutionarySelection : MonoBehaviour
         return mutants;
     }
 
-    private void NewBrains(int newAgents)
+    private void NewBrains(int addedAgents)
     {
-        int randomAgents = countAgents - newAgents;
+        int randomAgents = countAgents - addedAgents;
         if (randomAgents < 0)
         {
-            brains.RemoveRange(countAgents, -newAgents);
+            brains.RemoveRange(countAgents, -randomAgents);
             return;
         }
 

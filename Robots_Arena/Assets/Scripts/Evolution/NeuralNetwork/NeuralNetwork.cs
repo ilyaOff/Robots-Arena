@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NeuralNetwork 
+public struct NeuralNetwork 
 {
-    NeuralNetworkLayer[] layers = null;
+    private NeuralNetworkLayer[] layers;// = null;
 
     public int Inputs => layers[0].numberInputs;
     public int Outputs => layers[CountLayers-1].numberOutputs;

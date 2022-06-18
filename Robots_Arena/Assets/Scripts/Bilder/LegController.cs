@@ -17,8 +17,7 @@ public class LegController : MonoBehaviour
     private float[] calculateAngle;
     private bool usedBrain = false;
 
-    private float timer = 0;
-    private void Start()
+    private void Awake()
     {
         body = this.GetComponent<Rigidbody>();
         legs = this.gameObject.GetComponentsInChildren<Leg>().ToList();
@@ -41,7 +40,8 @@ public class LegController : MonoBehaviour
     {
         this.brain = brain;
         usedBrain = true;
-        timer = 0;
+
+        body.isKinematic = false;
 
         inputBrain = new float[brain.Inputs];
         calculateAngle = new float[brain.Outputs];
@@ -61,11 +61,15 @@ public class LegController : MonoBehaviour
     public void InitialPosition()
     {
         usedBrain = false;
+        body.isKinematic = true;
         for (int i = 0; i < legs.Count; i++)
         {
+            legs[i].Restart();
+            /*
             legs[i].NormalizeVerticalAngle = 0.5f;
             legs[i].NormalizeHipAngle = 0.9f;
             legs[i].NormalizeKneeAngle = 0.01f;
+            */
         }
     }
 
@@ -126,9 +130,9 @@ public class LegController : MonoBehaviour
         if (target != null)
             direction = (target.position - transform.position);
         
-        inputBrain[0+ shift] = direction.x;
-        inputBrain[1+shift] = direction.y;
-        inputBrain[2+ shift] = direction.z;
+        inputBrain[0 + shift] = direction.x;
+        inputBrain[1 + shift] = direction.y;
+        inputBrain[2 + shift] = direction.z;
         inputBrain[3 + shift] = direction.magnitude;
 
         Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
@@ -137,9 +141,7 @@ public class LegController : MonoBehaviour
 
         directionProject = Vector3.ProjectOnPlane(direction, transform.right);
         inputBrain[5 + shift] = Vector3.Angle(transform.up, directionProject);
-        
-        timer += Time.fixedDeltaTime;
-        inputBrain[6 + shift] = timer;
+                
 
         return brain.CalculeteOutput(inputBrain);
     }
