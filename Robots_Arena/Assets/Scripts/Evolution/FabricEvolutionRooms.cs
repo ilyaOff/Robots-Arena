@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FabricEvolutionRooms : MonoBehaviour
 {
-    [SerializeField] private LegController prefab;
+    [SerializeField] private FabricNeuralNetworkAgent fabricScorer;
     [SerializeField] private TargetRobots targetPrefab;
     [SerializeField] private EvolutionRoom roomPrefab;
 
@@ -26,11 +26,10 @@ public class FabricEvolutionRooms : MonoBehaviour
             rooms.Add(room);
         }
         for (int i = 0; i < Quantity; i++)
-        { 
-            LegController robot = Instantiate(prefab);
-            EvolutionScorer agent = robot.gameObject.AddComponent<EvolutionScorer>();
-            agent.name += i;
+        {
             TargetRobots target = Instantiate(targetPrefab);
+
+            INeuralNetworkAgent agent = fabricScorer.Create(i, target.transform);
 
             rooms[i].Initialize(agent, target);
         }

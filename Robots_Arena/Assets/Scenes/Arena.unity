@@ -658,6 +658,7 @@ GameObject:
   - component: {fileID: 850925898}
   - component: {fileID: 850925899}
   - component: {fileID: 850925900}
+  - component: {fileID: 850925901}
   m_Layer: 0
   m_Name: Placer
   m_TagString: Untagged
@@ -695,8 +696,8 @@ MonoBehaviour:
   countEpochs: 10000
   numberAddTimeEpochs: 500
   countAddTimeEpochs: 500
-  countAgents: 1
-  selectionPercentage: 50
+  countAgents: 130
+  selectionPercentage: 30
   crossingPercentage: 75
   mutationPercentage: 75
   mutationLitePercentage: 50
@@ -714,12 +715,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd4176379aa3e8240beb546c2dfddf91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1737245668938278098, guid: ac40386ff6fa6e7468c8d964bf6aaaa3, type: 3}
+  fabricScorer: {fileID: 850925901}
   targetPrefab: {fileID: 3273090566970125891, guid: 35f9104b694a85e4f888aa9b65c0f75e,
     type: 3}
   roomPrefab: {fileID: 5047623475655046509, guid: 35816f14e97697143be3a64094629c06,
     type: 3}
   distanceBetweenRooms: 10
+--- !u!114 &850925901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850925897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c2ab9a11138ae1489f09561972d5b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1737245668938278098, guid: ac40386ff6fa6e7468c8d964bf6aaaa3, type: 3}
 --- !u!1 &1672488455
 GameObject:
   m_ObjectHideFlags: 0

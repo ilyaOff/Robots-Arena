@@ -5,32 +5,33 @@ using UnityEngine.Events;
 
 public class TargetRobots : MonoBehaviour
 {
-    private EvolutionScorer robot;
+    private INeuralNetworkAgent robot;
     private EvolutionRoom room;
 
-    //public UnityEvent Succes = new UnityEvent();
+
+    public UnityEvent Succes = new UnityEvent();
     public void SetRoom(EvolutionRoom room)
     {
         this.room = room;
     }
 
-    public void SetRobot(EvolutionScorer robot)
+    public void SetRobot(INeuralNetworkAgent robot)
     {
         this.robot = robot;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        EvolutionScorer scorer = other.GetComponentInParent<EvolutionScorer>();
+        INeuralNetworkAgent scorer = other.GetComponentInParent<INeuralNetworkAgent>();
         if (scorer is null)
             return;
 
         if (scorer == robot)
         {
-            scorer.PointsForReachingGoal();
+            //scorer.PointsForReachingGoal();
             enabled = false;
             //Debug.Log("I'm sleep");
-            //Succes?.Invoke();
+            Succes.Invoke();
             room.PlaceTarget();
         }
             

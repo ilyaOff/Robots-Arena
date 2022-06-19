@@ -38,6 +38,6 @@ public class ScoreText : MonoBehaviour
             
         }
         score.text = $"Score: {max}";
-        chempion.text = $"Chempion: {k}";
+        chempion.text = $"Champion: {k}";
     }
 }

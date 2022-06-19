@@ -7,21 +7,33 @@ public class EvolutionRoom : MonoBehaviour
     [SerializeField] private Transform[] goals;
     [SerializeField] private int currentGoal = 0;
     private int startGoal = -1;
-    [SerializeField] private Transform StartAgent;
+
+    [SerializeField] private Transform startAgent;
 
     [SerializeField] private TargetRobots target;
-    [SerializeField] private EvolutionScorer agent;
+    [SerializeField] private INeuralNetworkAgent agent;
 
-    public float Score => agent.Score;
+    [SerializeField] private List<Challenge> _challenges;
+    //public IEnumerable<Challenge> Challenges => _challenges;
+    public float Score { get; private set; }
 
-   /* private void OnDrawGizmos()
+    /* private void OnDrawGizmos()
+     {
+         Gizmos.color = Color.green;
+         int height = 4;
+         Gizmos.DrawWireCube(transform.position + Vector3.up* height/2, new Vector3(10, height, 10));
+     }*/
+    private void FixedUpdate()
     {
-        Gizmos.color = Color.green;
-        int height = 4;
-        Gizmos.DrawWireCube(transform.position + Vector3.up* height/2, new Vector3(10, height, 10));
-    }*/
-
-    public void Initialize(EvolutionScorer newAgent, TargetRobots newTarget)
+        float sum = 0;
+        foreach (var challenge in _challenges)
+        {
+            challenge.Update();
+            sum += challenge.Score;
+        }
+        Score = sum;
+    }
+    public void Initialize(INeuralNetworkAgent newAgent, TargetRobots newTarget)
     {
         if (newAgent is null)
         {
@@ -34,65 +46,52 @@ public class EvolutionRoom : MonoBehaviour
         }
 
         agent = newAgent;
-        agent.ChangeTarget(newTarget);
-        agent.enabled = false;
+        foreach (var challenge in _challenges)
+        {
+            challenge.StartChallenge(newAgent, newTarget);
+        }
         PlaceAgent();
 
+        if(target != null)
+            target.Succes.RemoveListener(TestListener);
+
         target = newTarget;
-        /*if (target != null)
-        {
-            target.Succes.RemoveListener(PlaceTarget);
-        }        
-        target.Succes.AddListener(PlaceTarget);*/
         target.SetRoom(this);
         target.SetRobot(newAgent);
         target.enabled = false;
-        //startGoal = currentGoal = Random.Range(0, goals.Length);
         PlaceTarget();
+
+        target.Succes.AddListener(TestListener);
+    }
+
+    private void TestListener()
+    {
+        Debug.Log("ListenerSucces");
     }
 
     public void Restart(NeuralNetwork brain)
     {
-        RestartAgent(brain);
+        agent.NewBrain(brain);
+        PlaceAgent();
+        foreach (var challenge in _challenges)
+        {
+            challenge.Restart();
+        }
+
         currentGoal = startGoal;
         PlaceTarget();
-        /*
-        target.SetRobot(robot);
-       robot.ChangeTarget(target);
-       */
     }
 
     private void PlaceAgent()
     {
-        agent.transform.position = StartAgent.position;
+        agent.transform.position = startAgent.position;
         agent.transform.rotation = Quaternion.identity;
-    }
-
-    public void Stop()
-    {
-        //agent.Score += agent.transform.position.z - StartAgent.position.z;
-       
-        agent.controller.InitialPosition();
-        PlaceAgent();
-        agent.enabled = false;
-    }
-
-    private void RestartAgent(NeuralNetwork brain)
-    {
-        agent.controller.NewBrain(brain);
-        
-        agent.enabled = true;
-
-        //if (Vector3.Distance(agent.transform.position, StartAgent.position) > 15f)
-        {
-            PlaceAgent();
-        }
     }
 
     public void PlaceTarget()
     {
         currentGoal = (currentGoal + 1) % goals.Length;
-        target.transform.position = goals[currentGoal].position ;
+        target.transform.position = goals[currentGoal].position;
         target.enabled = true;
     }
 }

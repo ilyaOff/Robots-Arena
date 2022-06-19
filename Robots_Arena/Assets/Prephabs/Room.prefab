@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2997870771496262375}
   - component: {fileID: 5047623475655046509}
+  - component: {fileID: 4717997835097322199}
+  - component: {fileID: 5798270025084159452}
+  - component: {fileID: 1870726057690728691}
+  - component: {fileID: 3521924080720094374}
   m_Layer: 0
   m_Name: Room
   m_TagString: Untagged
@@ -60,9 +64,67 @@ MonoBehaviour:
   - {fileID: 2465468681849412088}
   - {fileID: 5017658575416930166}
   currentGoal: 0
-  StartAgent: {fileID: 3630753553442074658}
+  startAgent: {fileID: 3630753553442074658}
   target: {fileID: 0}
-  agent: {fileID: 0}
+  _challenges:
+  - {fileID: 4717997835097322199}
+  - {fileID: 5798270025084159452}
+  - {fileID: 1870726057690728691}
+  - {fileID: 3521924080720094374}
+--- !u!114 &4717997835097322199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441976042683330562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f85f5d229d0924da1d05517f0c34f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reward: 10
+--- !u!114 &5798270025084159452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441976042683330562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9a9c6ddf25ab964086bbf258e66bbae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reward: 0.01
+  fine: -0.3
+  maxAngle: 45
+--- !u!114 &1870726057690728691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441976042683330562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db354d4189d0004899b61aebbf6d7b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reward: 0.1
+--- !u!114 &3521924080720094374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441976042683330562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28923a06e8a89274e8b436a56bf2f634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reward: 30
 --- !u!1 &1179248743003865526
 GameObject:
   m_ObjectHideFlags: 0

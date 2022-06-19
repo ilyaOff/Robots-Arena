@@ -4,19 +4,18 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class LegController : MonoBehaviour
+public class LegController : MonoBehaviour, INeuralNetworkAgent
 {
     [SerializeField] private List<Leg> legs;
     public int CountLegs => legs.Count;
-
+    
     private Rigidbody body;
 
-    private NeuralNetwork brain;
-    [SerializeField] private Transform target;
+    public NeuralNetwork Brain { get; private set; }   
     private float[] inputBrain;
-    private float[] calculateAngle;
     private bool usedBrain = false;
 
+    private Navigator _navigator;
     private void Awake()
     {
         body = this.GetComponent<Rigidbody>();
@@ -32,56 +31,37 @@ public class LegController : MonoBehaviour
         {
             leg.AttachToBody(body);
         }
+    }
 
-        //NewBrain();
+    public void Initialize(Navigator navigator)
+    {
+        if (navigator is null)
+            throw new System.ArgumentNullException("navigator");
+
+        _navigator = navigator;
     }
 
     public void NewBrain(NeuralNetwork brain)
     {
-        this.brain = brain;
-        usedBrain = true;
-
-        body.isKinematic = false;
-
+        Brain = brain;
         inputBrain = new float[brain.Inputs];
-        calculateAngle = new float[brain.Outputs];
+
+        InitialPosition();
+
+        usedBrain = true;
+        body.isKinematic = false;
     }
 
-    public bool TryChangeTarget(Transform newTarget)
-    { 
-        if(newTarget != null)
-        {
-            target = newTarget;
-            return true;
-        }
-
-        return false;
-    }
-
-    public void InitialPosition()
+    private void InitialPosition()
     {
         usedBrain = false;
         body.isKinematic = true;
         for (int i = 0; i < legs.Count; i++)
         {
             legs[i].Restart();
-            /*
-            legs[i].NormalizeVerticalAngle = 0.5f;
-            legs[i].NormalizeHipAngle = 0.9f;
-            legs[i].NormalizeKneeAngle = 0.01f;
-            */
         }
     }
-
-    private void Update()
-    {
-        /*if (Input.GetKeyDown(KeyCode.O))
-        {
-            NewBrain();
-        }*/
-            
-    }
-    
+        
     private void FixedUpdate()
     {
         Moving();
@@ -91,7 +71,7 @@ public class LegController : MonoBehaviour
     {
         if (!usedBrain) return;
 
-        calculateAngle = CalculateBrain();
+        float[] calculateAngle = CalculateBrain();
         for (int i = 0; i < legs.Count; i++)
         {
             legs[i].NormalizeVerticalAngle += CalculateAngle(calculateAngle[3 * i]);
@@ -103,15 +83,9 @@ public class LegController : MonoBehaviour
     private float CalculateAngle(float output)
     {
         float threshold = 0.25f;
-        float result = 0f;
-        if (Mathf.Abs(output) > threshold*3)
-            result = 3;
-        else if (Mathf.Abs(output) > threshold*2)
-            result = 2;
-        else if (Mathf.Abs(output) > threshold )
-            result = 1;
+        int result = Mathf.RoundToInt(output/ threshold);
 
-        return  result*Time.fixedDeltaTime*Mathf.Sign(output);        
+        return  result*Time.fixedDeltaTime;        
     }
 
     private float[] CalculateBrain()
@@ -126,9 +100,7 @@ public class LegController : MonoBehaviour
 
         shift = 3 * legs.Count;
 
-        Vector3 direction = Vector3.zero;
-        if (target != null)
-            direction = (target.position - transform.position);
+        Vector3 direction = _navigator.Direction();            
         
         inputBrain[0 + shift] = direction.x;
         inputBrain[1 + shift] = direction.y;
@@ -143,6 +115,6 @@ public class LegController : MonoBehaviour
         inputBrain[5 + shift] = Vector3.Angle(transform.up, directionProject);
                 
 
-        return brain.CalculeteOutput(inputBrain);
-    }
+        return Brain.CalculeteOutput(inputBrain);
+    }    
 }

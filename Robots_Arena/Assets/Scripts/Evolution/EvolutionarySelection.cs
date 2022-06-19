@@ -95,10 +95,10 @@ public class EvolutionarySelection : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < rooms.Count; i++)
+        /*for (int i = 0; i < rooms.Count; i++)
         {
             rooms[i].Stop();
-        }
+        }*/
     }
 
     private void StartInitialEpochs()
@@ -168,7 +168,7 @@ public class EvolutionarySelection : MonoBehaviour
         }
         brains.Clear();
 
-        /*for (int i = 0; i < /*Survivors greatBrains.Count; i++)
+        for (int i = 0; i < /*Survivors*/ greatBrains.Count; i++)
         {
             for (int j = greatBrains.Count - 2; j >= i; j--)
             { 
@@ -179,7 +179,7 @@ public class EvolutionarySelection : MonoBehaviour
                     greatBrains[j+1] = brain;
                 }
             }
-        }*/
+        }
         for (int i = 0; i < Survivors; i++)
         {
             brains.Add(greatBrains[i].Brain);

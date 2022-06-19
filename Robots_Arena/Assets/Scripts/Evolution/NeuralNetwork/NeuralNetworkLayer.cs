@@ -160,6 +160,8 @@ public struct NeuralNetworkLayer
     private float HyperbolicTangent(float input)
     {
         float result = (float)Math.Exp(2*input);
+        if (float.IsInfinity(result))
+            return 1f;
         return (result - 1) / (result + 1);
     }
 
