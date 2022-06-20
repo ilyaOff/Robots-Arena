@@ -64,20 +64,22 @@ public struct NeuralNetworkLayer
             }*/
             for (int j = 0; j < Columns; j++)
             {
-                if (UnityEngine.Random.Range(0, 2) % 2 == 0)
-                {
-                    weight[i, j] = first.weights[i, j];
-                }
-                else
-                {
-                    weight[i, j] = second.weights[i, j];
-                }
-                
+                //weight[i, j] = (first.weights[i, j]+ second.weights[i, j])/2;
+                 if (UnityEngine.Random.Range(0, 2) % 2 == 0)
+                 {
+                     weight[i, j] = first.weights[i, j];
+                 }
+                 else
+                 {
+                     weight[i, j] = second.weights[i, j];
+                 }
+
             }
         }
         Matrix offset = new Matrix(1, Columns);
         for (int j = 0; j < Columns; j++)
         {
+            //offset[0, j] = (first.offset[0, j] + second.offset[0, j]) / 2;
             if (UnityEngine.Random.Range(0, 2) % 2 == 0)
             {
                 offset[0, j] = first.offset[0, j];

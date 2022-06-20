@@ -8,13 +8,13 @@ public class MovingForwardChallenge : Challenge
 
     protected override void Initialize(INeuralNetworkAgent agentTransform, TargetRobots target)
     {
-        _startPosition = _transform.position;
+        _startPosition = agentTransform.transform.position;
     }
 
     public override void Update()
     {
         float distance = _transform.position.z - _startPosition.z;
-        Score = reward / (0.001f + distance);
+        Score = reward / (1f + distance);
     }
 }
 

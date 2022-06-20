@@ -96,9 +96,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9a9c6ddf25ab964086bbf258e66bbae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reward: 0.01
-  fine: -0.3
-  maxAngle: 45
+  reward: 0.005
+  fine: -0.05
+  maxAngle: 60
 --- !u!114 &1870726057690728691
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,10 @@ public class Leg : MonoBehaviour
     private Rigidbody connection;
 
     private HingeJointController vertical, hip, knee;
-        
+
+    [SerializeField] private Food food;
+    public bool InGround => food.InGround;
+
     public float VerticalAngle
     {
         get

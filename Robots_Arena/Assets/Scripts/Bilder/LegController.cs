@@ -93,12 +93,13 @@ public class LegController : MonoBehaviour, INeuralNetworkAgent
         int shift = 0;
         for (int i = 0; i < legs.Count; i++)
         {
-            inputBrain[3 * i] = legs[i].NormalizeVerticalAngle;
-            inputBrain[3 * i + 1] = legs[i].NormalizeHipAngle;
-            inputBrain[3 * i + 2] = legs[i].NormalizeKneeAngle;
+            inputBrain[4 * i] = CalculateAngleForBrain(legs[i].NormalizeVerticalAngle);
+            inputBrain[4 * i + 1] = CalculateAngleForBrain(legs[i].NormalizeHipAngle);
+            inputBrain[4 * i + 2] = CalculateAngleForBrain(legs[i].NormalizeKneeAngle);
+            inputBrain[4 * i + 3] = legs[i].InGround ? 1 : -1;
         }
 
-        shift = 3 * legs.Count;
+        shift = 4 * legs.Count;
 
         Vector3 direction = _navigator.Direction();            
         
@@ -116,5 +117,10 @@ public class LegController : MonoBehaviour, INeuralNetworkAgent
                 
 
         return Brain.CalculeteOutput(inputBrain);
-    }    
+    }
+
+    private float CalculateAngleForBrain(float normalizeAngle)
+    {
+        return normalizeAngle * 2 - 1;
+    }
 }

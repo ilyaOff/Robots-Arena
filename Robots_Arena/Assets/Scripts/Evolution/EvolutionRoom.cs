@@ -6,7 +6,7 @@ public class EvolutionRoom : MonoBehaviour
 {
     [SerializeField] private Transform[] goals;
     [SerializeField] private int currentGoal = 0;
-    private int startGoal = -1;
+    private int startGoal = 1;
 
     [SerializeField] private Transform startAgent;
 
@@ -23,6 +23,11 @@ public class EvolutionRoom : MonoBehaviour
          int height = 4;
          Gizmos.DrawWireCube(transform.position + Vector3.up* height/2, new Vector3(10, height, 10));
      }*/
+    private void Start()
+    {
+        startGoal = Random.Range(0, goals.Length);
+    }
+
     private void FixedUpdate()
     {
         float sum = 0;
@@ -46,11 +51,8 @@ public class EvolutionRoom : MonoBehaviour
         }
 
         agent = newAgent;
-        foreach (var challenge in _challenges)
-        {
-            challenge.StartChallenge(newAgent, newTarget);
-        }
         PlaceAgent();
+        
 
         if(target != null)
             target.Succes.RemoveListener(TestListener);
@@ -62,6 +64,11 @@ public class EvolutionRoom : MonoBehaviour
         PlaceTarget();
 
         target.Succes.AddListener(TestListener);
+
+        foreach (var challenge in _challenges)
+        {
+            challenge.StartChallenge(newAgent, newTarget);
+        }
     }
 
     private void TestListener()

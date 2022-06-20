@@ -48,8 +48,10 @@ public class EvolutionarySelection : MonoBehaviour
         int countLegs = 6;
         int inputLayer = 3//dimension of Target
                     + 1//Distance to target
-                    + 2//Angles between forward and direction to target                   
-                    + countLegs * 3;// prefab.CountLegs //angle of leg                
+                    + 2//Angles between forward and direction to target  
+                     + countLegs // in ground
+                    + countLegs * 3;// prefab.CountLegs //angle of leg     
+       
         int outputLayer = countLegs * 3;//angle of leg
 
         return new NeuralNetwork(new int[]
@@ -67,8 +69,8 @@ public class EvolutionarySelection : MonoBehaviour
         brains = new List<NeuralNetwork>();
         greatBrains = new List<ScoreBrain>();
 
-        rooms = fabric.Create(countAgents+1);
-        Debug.Log(rooms[countAgents].transform.position);
+        rooms = fabric.Create(countAgents);
+
         Random.InitState(123456);
         StartInitialEpochs();
     }
@@ -104,8 +106,7 @@ public class EvolutionarySelection : MonoBehaviour
     private void StartInitialEpochs()
     {
         numberEpochs = 1;
-        NewBrains(0);
-        greatBrains.Add(new ScoreBrain(brains[0], -1000));
+        NewBrains(0);       
         RestartRooms();
     }
 
@@ -151,17 +152,15 @@ public class EvolutionarySelection : MonoBehaviour
 
     private void RestartRooms()
     {
-        for (int i = 0; i < rooms.Count-1; i++)
+        for (int i = 0; i < rooms.Count; i++)
         {
             rooms[i].Restart(brains[i]);
         }
-        rooms[rooms.Count - 1].Restart(greatBrains[0].Brain);
+       
     }
 
     private int BrainSelection()
     {
-        Debug.Log($"Replay:{rooms[brains.Count].Score}");
-
         for (int i = 0; i < brains.Count; i++)
         {
             greatBrains.Add(new ScoreBrain(brains[i], rooms[i].Score));
@@ -211,7 +210,7 @@ public class EvolutionarySelection : MonoBehaviour
     {
         int mutants = 0;
 
-        for (int i = 0; i < Survivors; i++)
+        for (int i = 0; i < greatBrains.Count; i++)
         {
             if (UnityEngine.Random.Range(0, 100) < mutationLitePercentage)
             {

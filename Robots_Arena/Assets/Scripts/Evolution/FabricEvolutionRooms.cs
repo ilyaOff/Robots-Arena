@@ -27,9 +27,16 @@ public class FabricEvolutionRooms : MonoBehaviour
         }
         for (int i = 0; i < Quantity; i++)
         {
-            TargetRobots target = Instantiate(targetPrefab);
+            TargetRobots target = null;
+            Transform transformTarget = null;
+            if (targetPrefab != null)
+            {
+                target = Instantiate(targetPrefab);
+                transformTarget = target.transform;
+            }
 
-            INeuralNetworkAgent agent = fabricScorer.Create(i, target.transform);
+
+            INeuralNetworkAgent agent = fabricScorer.Create(i, transformTarget);
 
             rooms[i].Initialize(agent, target);
         }
