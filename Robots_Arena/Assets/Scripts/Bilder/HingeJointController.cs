@@ -6,6 +6,7 @@ public class HingeJointController
 {
     private HingeJoint joint;
 
+
     public float MinAngle => joint.limits.min;
     public float MaxAngle => joint.limits.max;
     public float JointAngle
@@ -17,8 +18,14 @@ public class HingeJointController
         set
         {
             JointSpring spring = joint.spring;
-            spring.targetPosition = Mathf.Clamp(value, MinAngle, MaxAngle);
+            float newTarget = Mathf.Clamp(value, MinAngle, MaxAngle);
+            float delta = spring.targetPosition - newTarget;
+
+            spring.targetPosition = newTarget;
             joint.spring = spring;
+            
+            //joint.transform.RotateAround(joint.connectedAnchor, joint.axis, delta);
+            joint.transform.Rotate( joint.axis, delta);
         }
     }
 
@@ -41,7 +48,7 @@ public class HingeJointController
     public HingeJointController(HingeJoint joint)
     {
         this.joint = joint;
-
+        joint.useSpring = false;
         startTarget = joint.spring.targetPosition;
 
         Transform transform = joint.transform;

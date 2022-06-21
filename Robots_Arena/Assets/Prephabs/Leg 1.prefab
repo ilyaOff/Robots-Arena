@@ -319,7 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 1116717926969675621}
   food: {fileID: 418523743652937634}
-  test: 0
+  _inGround: 0
 --- !u!1 &8137941324106737679
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +668,7 @@ HingeJoint:
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0.018012524, y: 0, z: 0}
-  m_UseSpring: 1
+  m_UseSpring: 0
   m_Spring:
     spring: 10000
     damper: 2000
@@ -752,7 +752,7 @@ HingeJoint:
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_UseSpring: 1
+  m_UseSpring: 0
   m_Spring:
     spring: 10000
     damper: 2000
@@ -915,7 +915,7 @@ HingeJoint:
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0.525, y: 0, z: 0}
-  m_UseSpring: 1
+  m_UseSpring: 0
   m_Spring:
     spring: 10000
     damper: 2000
