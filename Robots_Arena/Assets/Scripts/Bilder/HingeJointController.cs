@@ -1,63 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class HingeJointController
+public class HingeJointController : MonoBehaviour
 {
-    private HingeJoint joint;
+    [SerializeField] private Transform _connect;
+    [SerializeField] private Vector3 _axis = Vector3.forward;
+    [SerializeField] private Vector3 _correctAxis = Vector3.zero;
 
-    public float MinAngle => joint.limits.min;
-    public float MaxAngle => joint.limits.max;
-    public float JointAngle
-    {
-        get
-        {
-            return joint.spring.targetPosition;
-        }
+    [SerializeField] private float _minAngle = 0f;
+    [SerializeField] private float _maxAngle = 0f;
+    public float MinAngle => _minAngle ;
+    public float MaxAngle => _maxAngle;
+
+    [SerializeField] private float startAngle = 0f;
+    [SerializeField] private float _angle = 0f;
+    public float JointAngle 
+    { 
+        get => _angle;
         set
         {
-            JointSpring spring = joint.spring;
-            spring.targetPosition = Mathf.Clamp(value, MinAngle, MaxAngle);
-            joint.spring = spring;
-        }
+            _angle = Mathf.Clamp(value, MinAngle, MaxAngle);
+            transform.Rotate(_connect.position, _angle);
+        }      
     }
 
     public float NormalizeJointAngle
     {
-        get
-        { 
-            return (JointAngle - MinAngle) / (MaxAngle - MinAngle);
-        }
-        set
-        {
-            JointAngle = Mathf.Clamp(value, 0, 1) * (MaxAngle - MinAngle) + MinAngle;
-        }
+        get => (MaxAngle == MinAngle) ? 1 : (JointAngle - MinAngle) / (MaxAngle - MinAngle);        
+        set => JointAngle = value * (MaxAngle - MinAngle) + MinAngle;
     }
 
     private Vector3 startPosition;
     private Quaternion startRotation;
-    private float startTarget;
 
-    public HingeJointController(HingeJoint joint)
+    private void OnDrawGizmosSelected()
     {
-        this.joint = joint;
-
-        startTarget = joint.spring.targetPosition;
-
-        Transform transform = joint.transform;
+        Gizmos.color = Color.green;
+        Vector3 start = _correctAxis + _connect.position;
+        Vector3 end = start + _axis*0.4f;
+        Gizmos.DrawLine(start, end);
+    }
+    private void Start()
+    {
         startPosition = transform.localPosition;
         startRotation = transform.localRotation;
+
+        if (MinAngle > MaxAngle)
+        {
+            float swap = _minAngle;
+            _minAngle = _maxAngle;
+            _maxAngle = swap;
+            Debug.LogWarning($"{name}: Min and Max angle incorrect, used swap");
+        }
     }
 
     public void Restart()
     {
-        Transform transform = joint.transform;
-
         transform.localPosition = startPosition;
         transform.localRotation = startRotation;
 
-        JointSpring spring = joint.spring;
-        spring.targetPosition =  startTarget;
-        joint.spring = spring;
+        JointAngle =  startAngle;
     }
+
 }
