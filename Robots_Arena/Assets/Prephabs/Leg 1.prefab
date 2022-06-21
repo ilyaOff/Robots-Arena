@@ -504,8 +504,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8137941326115956603}
-  - {fileID: 8137941326133105470}
   - {fileID: 3768038649415258056}
+  - {fileID: 8137941326133105470}
   - {fileID: 8137941324848190530}
   - {fileID: 8137941324106737675}
   m_Father: {fileID: 0}
@@ -652,12 +652,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connect: {fileID: 8137941324106737675}
-  _axis: {x: 0, y: 0, z: 1}
-  _correctAxis: {x: 0, y: 0, z: 0}
   _minAngle: -45
   _maxAngle: 45
   startAngle: 0
-  test: 0
 --- !u!1 &8137941325354542588
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,13 +680,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8137941325354542588}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6482862351940315298}
   m_Father: {fileID: 8137941324737630775}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5136700089224428730
 Rigidbody:
@@ -720,12 +717,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connect: {fileID: 8137941324848190530}
-  _axis: {x: 0, y: 0, z: 1}
-  _correctAxis: {x: 0, y: 0, z: 0}
   _minAngle: -45
   _maxAngle: 45
   startAngle: 0
-  test: 0
 --- !u!1 &8137941326115956604
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,14 +823,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8137941326133105471}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.0500001, y: 0, z: 0}
+  m_LocalPosition: {x: 1.05, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8137941324494222670}
   - {fileID: 4448729073659613226}
   - {fileID: 6096850090445877528}
   m_Father: {fileID: 8137941324737630775}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1178362778093341097
 Rigidbody:
@@ -867,9 +861,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connect: {fileID: 3768038649415258056}
-  _axis: {x: 0, y: 0, z: 1}
-  _correctAxis: {x: 0, y: 0, z: 0}
   _minAngle: -120
   _maxAngle: 0
   startAngle: 0
-  test: 0
