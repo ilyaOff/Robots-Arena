@@ -9,18 +9,16 @@ public class FabricNeuralNetworkAgent : MonoBehaviour
     {
         LegController robot = Instantiate(prefab);
 
-        Navigator navigator;
         if (target is null)
         {
-            navigator = robot.gameObject.AddComponent<Navigator>();
+            robot.Initialize(new Navigator());
         }
         else
         {
-            navigator = robot.gameObject.AddComponent<NavigatorToTarget>();
-            ((NavigatorToTarget)navigator).TryChangeTarget(target);
+            NavigatorToTarget navigator = robot.gameObject.AddComponent<NavigatorToTarget>();
+            navigator.TryChangeTarget(target);
+            robot.Initialize(navigator);
         }
-        robot.Initialize(navigator);
-
         robot.name += number;
 
         return (INeuralNetworkAgent)robot;
