@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 728604177437330551}
   - component: {fileID: 728604177437330555}
   - component: {fileID: 2956176051502638272}
-  - component: {fileID: 192345546891190342}
+  - component: {fileID: 4139895579738540939}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -258,7 +258,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &192345546891190342
+--- !u!114 &4139895579738540939
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,7 +267,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 728604177437330550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ac23f72dea33484db2ad82f8ec98ccc, type: 3}
+  m_Script: {fileID: 11500000, guid: 0fd8ba386792d4847ae6717f28fcfff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   legs: []
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 2223104955800693481}
   food: {fileID: 8229500185400978542}
-  _inGround: 0
+  test: 0
 --- !u!1 &919796368571646878
 GameObject:
   m_ObjectHideFlags: 0
@@ -2066,7 +2066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 7183369282669148476}
   food: {fileID: 5257975964732222829}
-  _inGround: 0
+  test: 0
 --- !u!1 &2503788277390357395
 GameObject:
   m_ObjectHideFlags: 0
@@ -3502,7 +3502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 5668700523273920452}
   food: {fileID: 7538853327556503588}
-  _inGround: 0
+  test: 0
 --- !u!1 &4515027779047800030
 GameObject:
   m_ObjectHideFlags: 0
@@ -3861,7 +3861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 8918344887330775560}
   food: {fileID: 5002533519624763243}
-  _inGround: 0
+  test: 0
 --- !u!1 &5006081744827236609
 GameObject:
   m_ObjectHideFlags: 0
@@ -4963,7 +4963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 7247029625628540637}
   food: {fileID: 6818789098791291679}
-  _inGround: 0
+  test: 0
 --- !u!1 &8039846761474407482
 GameObject:
   m_ObjectHideFlags: 0
@@ -5234,7 +5234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knee: {fileID: 817803614116459582}
   food: {fileID: 4712064061481406245}
-  _inGround: 0
+  test: 0
 --- !u!1 &8470060132075534600
 GameObject:
   m_ObjectHideFlags: 0
