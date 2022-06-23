@@ -16,10 +16,11 @@ public class LegActionController : LegController
 
         for (int i = 0; i < legs.Count; i++)
         {
-            float k = i < legs.Count / 2 ? 0 : moving.MaxTime/2;
-            legs[i].NormalizeVerticalAngle = CalculateAngle(moving.vertical, timer + shift[i]);
-            legs[i].NormalizeHipAngle = CalculateAngle(moving.hip, k+timer + shift[i]);
-            legs[i].NormalizeKneeAngle = CalculateAngle(moving.knee, k +timer + shift[i]);
+            float reverseTime = i < legs.Count / 2 ? 0 : moving.MaxTime/2;
+            float time = timer + moving.MaxTime * shift[i];
+            legs[i].NormalizeVerticalAngle = CalculateAngle(moving.vertical, time);
+            legs[i].NormalizeHipAngle = CalculateAngle(moving.hip, reverseTime + time);
+            legs[i].NormalizeKneeAngle = CalculateAngle(moving.knee, reverseTime + time);
         }
     }
 
