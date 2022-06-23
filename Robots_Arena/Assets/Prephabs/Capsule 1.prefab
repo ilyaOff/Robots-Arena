@@ -493,7 +493,7 @@ HingeJoint:
   m_Anchor: {x: -0.525, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.52506477, y: -0.005650486, z: -0.000000044162768}
+  m_ConnectedAnchor: {x: 0.5250647, y: -0.005650367, z: -0.000000044162764}
   m_UseSpring: 1
   m_Spring:
     spring: 100000
@@ -1806,7 +1806,7 @@ HingeJoint:
   m_Anchor: {x: -0.485, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.0000015875628, y: -0.0000012739146, z: 0.010289339}
+  m_ConnectedAnchor: {x: 0.0000015875629, y: -0.0000012739146, z: 0.010288544}
   m_UseSpring: 1
   m_Spring:
     spring: 10000
@@ -2099,7 +2099,7 @@ HingeJoint:
   m_Anchor: {x: -0.525, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.5250187, y: -0.001203815, z: -0.0000000054426437}
+  m_ConnectedAnchor: {x: 0.5250187, y: -0.0012036959, z: -0.000000005423999}
   m_UseSpring: 1
   m_Spring:
     spring: 100000
@@ -2262,7 +2262,7 @@ HingeJoint:
   m_Anchor: {x: -0.525, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.52501875, y: -0.00120375, z: 0.000000075654725}
+  m_ConnectedAnchor: {x: 0.52501875, y: -0.0012038691, z: 0.00000007563608}
   m_UseSpring: 1
   m_Spring:
     spring: 100000
@@ -2346,7 +2346,7 @@ HingeJoint:
   m_Anchor: {x: -0.485, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.00000079283353, y: -0.0000044137983, z: 0.01028934}
+  m_ConnectedAnchor: {x: 0.00000079283336, y: -0.0000044137983, z: 0.010290136}
   m_UseSpring: 1
   m_Spring:
     spring: 10000
@@ -3114,7 +3114,7 @@ HingeJoint:
   m_Anchor: {x: -0.525, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.5250182, y: -0.0012037116, z: -0.00000082635336}
+  m_ConnectedAnchor: {x: 0.5250182, y: -0.0012035924, z: -0.0000008263347}
   m_UseSpring: 1
   m_Spring:
     spring: 100000
@@ -4315,7 +4315,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -4339,6 +4339,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   moving: {fileID: 1815894646331555574}
+  inverse: 000000010101
   shift:
   - 0
   - 0.66666675
@@ -4346,6 +4347,8 @@ MonoBehaviour:
   - 0.33333325
   - 0.66666675
   - 0
+  powerLegNumber: ffffffff00000000010000000100000000000000ffffffff
+  powerForward: 0.12
 --- !u!114 &1815894646331555574
 MonoBehaviour:
   m_ObjectHideFlags: 0
