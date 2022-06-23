@@ -48,7 +48,7 @@ public class HingeJointController
     public HingeJointController(HingeJoint joint)
     {
         this.joint = joint;
-        joint.useSpring = false;
+        //joint.useSpring = false;
         startTarget = joint.spring.targetPosition;
 
         Transform transform = joint.transform;
