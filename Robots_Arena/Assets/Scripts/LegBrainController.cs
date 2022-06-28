@@ -17,6 +17,7 @@ public class LegBrainController : LegController, INeuralNetworkAgent
     }
     protected override void Moving()
     {
+       
         float[] calculateAngle = CalculateBrain();
         for (int i = 0; i<legs.Count; i++)
         {
@@ -30,28 +31,32 @@ public class LegBrainController : LegController, INeuralNetworkAgent
         float threshold = 0.25f;
         int result = Mathf.RoundToInt(output / threshold);
 
-        return result * Time.fixedDeltaTime;
+        return output * Time.fixedDeltaTime;
     }
 
     private float[] CalculateBrain()
     {
         int shift = 0;
+        int legParametrs = 10;
         for (int i = 0; i < legs.Count; i++)
         {
-            inputBrain[4 * i] = CalculateAngleForBrain(legs[i].NormalizeVerticalAngle);
-            inputBrain[4 * i + 1] = CalculateAngleForBrain(legs[i].NormalizeHipAngle);
-            inputBrain[4 * i + 2] = CalculateAngleForBrain(legs[i].NormalizeKneeAngle);
-            inputBrain[4 * i + 3] = legs[i].InGround ? 1 : -1;
+            int k = legParametrs * i;
+            inputBrain[k ] = legs[i].InGround ? 1 : -1;
+            PushJointPosition(k + 1 , legs[i].Vertical);
+            PushJointPosition(k+ 4, legs[i].Hip);
+            PushJointPosition(k + 7, legs[i].Knee);
         }
 
-        shift = 4 * legs.Count;
+        shift = legParametrs * legs.Count;
 
         Vector3 direction = _navigator.Direction();
+        inputBrain[0 + shift] = direction.magnitude;
 
-        inputBrain[0 + shift] = direction.x;
-        inputBrain[1 + shift] = direction.y;
-        inputBrain[2 + shift] = direction.z;
-        inputBrain[3 + shift] = direction.magnitude;
+        direction = direction.normalized;
+        inputBrain[1 + shift] = direction.x;
+        inputBrain[2 + shift] = direction.y;
+        inputBrain[3 + shift] = direction.z;
+        
 
         Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
         Vector3 directionProject = Vector3.ProjectOnPlane(direction, Vector3.up);
@@ -64,9 +69,11 @@ public class LegBrainController : LegController, INeuralNetworkAgent
         return Brain.CalculeteOutput(inputBrain);
     }
     
-    private float CalculateAngleForBrain(float normalizeAngle)
+    private void PushJointPosition(int shift, Vector3 jointPosition)
     {
-        return normalizeAngle * 2 - 1;
+        inputBrain[shift] = jointPosition.x;
+        inputBrain[shift + 1] = jointPosition.y;
+        inputBrain[shift + 2] = jointPosition.z;
     }
 
 }

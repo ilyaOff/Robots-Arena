@@ -15,10 +15,12 @@ public class BalanceChallenge : Challenge
 
         if (angle > maxAngle)
         {
-            Score += fine / (1f + angle);
+            Score += fine * (angle - maxAngle);
         }
-
-        Score += reward / (1f + angle);
+        else
+        {
+            Score += reward / (1f + angle);
+        }
     }
 
     protected override void Initialize(INeuralNetworkAgent agentTransform, TargetRobots target)

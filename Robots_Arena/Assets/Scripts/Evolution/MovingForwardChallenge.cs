@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovingForwardChallenge : Challenge
 {
-    private Vector3 _startPosition;
+    private Vector3 _startPosition = Vector3.zero;
 
     protected override void Initialize(INeuralNetworkAgent agentTransform, TargetRobots target)
     {
@@ -13,8 +13,10 @@ public class MovingForwardChallenge : Challenge
 
     public override void Update()
     {
+        if (_transform is null)
+            return;
         float distance = _transform.position.z - _startPosition.z;
-        Score = reward / (1f + distance);
+        Score = reward * distance;
     }
 }
 

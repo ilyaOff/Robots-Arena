@@ -12,6 +12,9 @@ public class Leg : MonoBehaviour
 
     [SerializeField] private Food food;
     public bool InGround => food.InGround;
+    public Vector3 Vertical => verticalJoint.transform.localPosition;
+    public Vector3 Hip => hipJoint.transform.localPosition;
+    public Vector3 Knee => kneeJoint.transform.localPosition;
 
     public float VerticalAngle
     {

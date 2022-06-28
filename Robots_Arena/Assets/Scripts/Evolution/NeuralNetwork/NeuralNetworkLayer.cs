@@ -132,7 +132,7 @@ public struct NeuralNetworkLayer
 
     private static float RandomWeight()
     {
-        float RangeWeight = 10f;
+        float RangeWeight = 100f;
         return UnityEngine.Random.Range(-RangeWeight, RangeWeight);
     }
 

@@ -51,29 +51,26 @@ public class EvolutionRoom : MonoBehaviour
         }
 
         agent = newAgent;
+        agent.transform.gameObject.name = "AI" + this.name;
         PlaceAgent();
         
 
         if(target != null)
-            target.Succes.RemoveListener(TestListener);
+            target.Succes.RemoveListener(PlaceTarget);
 
         target = newTarget;
         target.SetRoom(this);
         target.SetRobot(newAgent);
-        target.enabled = false;
+        //target = false;
+        target.gameObject.name = "Target" + this.name;
         PlaceTarget();
 
-        target.Succes.AddListener(TestListener);
+        target.Succes.AddListener(PlaceTarget);
 
         foreach (var challenge in _challenges)
         {
             challenge.StartChallenge(newAgent, newTarget);
         }
-    }
-
-    private void TestListener()
-    {
-        Debug.Log("ListenerSucces");
     }
 
     public void Restart(NeuralNetwork brain)
@@ -97,8 +94,15 @@ public class EvolutionRoom : MonoBehaviour
 
     public void PlaceTarget()
     {
+        //Debug.Log("ListenerSucces");
         currentGoal = (currentGoal + 1) % goals.Length;
         target.transform.position = goals[currentGoal].position;
+        Invoke(nameof(Test), 0.1f);
+        
+    }
+    private void Test()
+    {
+        target.gameObject.SetActive(true);
         target.enabled = true;
     }
 }

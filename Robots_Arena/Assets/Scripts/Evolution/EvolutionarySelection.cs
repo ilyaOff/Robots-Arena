@@ -12,7 +12,7 @@ public class EvolutionarySelection : MonoBehaviour
 
     [SerializeField] private int numberAddTimeEpochs = 100;
     [SerializeField] private int countAddTimeEpochs = 100;
-
+    [Min(1)]
     [SerializeField] private int countAgents = 10;
 
     [Range(5, 50)]
@@ -46,11 +46,12 @@ public class EvolutionarySelection : MonoBehaviour
     private NeuralNetwork CreateBrain()
     {
         int countLegs = 6;
+        int legParametrs = 10;
         int inputLayer = 3//dimension of Target
                     + 1//Distance to target
                     + 2//Angles between forward and direction to target  
                      + countLegs // in ground
-                    + countLegs * 3;// prefab.CountLegs //angle of leg     
+                    + countLegs * legParametrs;// prefab.CountLegs      
        
         int outputLayer = countLegs * 3;//angle of leg
 
@@ -58,6 +59,7 @@ public class EvolutionarySelection : MonoBehaviour
                         {
                         inputLayer,
                         //outputLayer*2,
+                        12,
                         6,
                         //outputLayer*2,
                         //5, 4,

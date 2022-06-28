@@ -7,7 +7,7 @@ public class TargetRobots : MonoBehaviour
 {
     private INeuralNetworkAgent robot;
     private EvolutionRoom room;
-
+    private bool NotToch = true;
 
     public UnityEvent Succes = new UnityEvent();
     public void SetRoom(EvolutionRoom room)
@@ -20,19 +20,26 @@ public class TargetRobots : MonoBehaviour
         this.robot = robot;
     }
 
+    private void OnEnable()
+    {
+        NotToch = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         INeuralNetworkAgent scorer = other.GetComponentInParent<INeuralNetworkAgent>();
         if (scorer is null)
             return;
 
-        if (scorer == robot)
+        if (scorer == robot && NotToch)
         {
             //scorer.PointsForReachingGoal();
-            enabled = false;
+            this.gameObject.SetActive(false);
+            this.enabled = false;
+            NotToch = false;
             //Debug.Log("I'm sleep");
             Succes.Invoke();
-            room.PlaceTarget();
+            //room.PlaceTarget();
         }
             
     }

@@ -6,6 +6,6 @@ public class Navigator : MonoBehaviour
 {
     public virtual Vector3 Direction()
     {
-        return transform.forward;
+        return Vector3.forward;
     }
 }

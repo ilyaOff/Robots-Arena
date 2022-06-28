@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reward: 0.005
-  fine: -0.05
-  maxAngle: 60
+  fine: -0.001
+  maxAngle: 30
 --- !u!114 &1870726057690728691
 MonoBehaviour:
   m_ObjectHideFlags: 0
